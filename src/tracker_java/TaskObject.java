@@ -16,7 +16,7 @@ public class TaskObject {
     @Id
     @GeneratedValue
     @Column(name="itemId")
-    public Long id;
+    public Long DT_RowId;
 
     @Column(name = "title")
     public String title;

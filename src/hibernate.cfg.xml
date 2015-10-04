@@ -36,6 +36,8 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="tracker_java.TaskObject"/>
+        <mapping class="tracker_java.MemberObject"/>
+        <mapping class="tracker_java.TasklistObject"/>
 
     </session-factory>
 

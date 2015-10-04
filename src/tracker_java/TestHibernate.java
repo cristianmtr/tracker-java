@@ -46,7 +46,7 @@ public class TestHibernate extends TestCase {
         session.beginTransaction();
         List result = session.createQuery( "from TaskObject" ).list();
         for ( TaskObject task : (List<TaskObject>) result ) {
-          System.out.format("task: id %d, title = %s %n", task.id, task.title);
+          System.out.format("task: id %d, title = %s %n", task.DT_RowId, task.title);
         }
         session.getTransaction().commit();
         session.close();
