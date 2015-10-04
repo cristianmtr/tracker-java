@@ -10,8 +10,11 @@ public class MainServer {
 		HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8000), 100);
 		
 		server.createContext("/", new rootHandler());
-		
+		server.createContext("/static", new staticHandler());
+
+
 		server.start();
+		System.out.println("server started");
 	}
 
 }
