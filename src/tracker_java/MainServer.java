@@ -23,8 +23,8 @@ public class MainServer {
 		ExecutorService excu = Executors.newCachedThreadPool();
 		server.setExecutor(excu);
 
-		server.createContext("/", new rootHandler());
-		server.createContext("/static", new staticHandler());
+//		server.createContext("/", new rootHandler());
+//		server.createContext("/static", new staticHandler());
 		server.createContext("/json", new jsonHandler());
 
 
