@@ -220,34 +220,30 @@ function replaceIdsWithValues(dataObject) {
 
 };
 
+
+function addTextFieldsFromIds(dataObject, field) {
+    var dataSource = null;
+    if (field == 'responsible' || field == 'author') {
+        dataSource = 'responsible';
+    }
+    else {
+        dataSource = field;
+    }
+    var id = dataObject[field];
+    var text = dataSources[dataSource][id];
+    if (text === undefined) {
+        text = "";
+    }
+    var text_field = field + "_text";
+    dataObject[text_field] = text;
+    return dataObject
+}
+
+
 function addValueFieldsToRowObject(dataObject) {
-    var responsible_id = dataObject['responsible'];
-    var author_id = dataObject['author'];
-    var tasklist_id = dataObject['tasklist'];
-    var priority = dataObject['priority'];
-    if (responsible_id != null) {
-        dataObject['responsible_text'] = dataSources['responsible'][responsible_id];
-    }
-    else {
-        dataObject['responsible_text'] = "";
-    }
-    if (author_id != null) {
-        dataObject['author_text'] = dataSources['responsible'][author_id];
-    }
-    else {
-        dataObject['author_text'] = "";
-    }
-    if (tasklist_id != null) {
-        dataObject['tasklist_text'] = dataSources['tasklist'][tasklist_id];
-    }
-    else {
-        dataObject['tasklist_text'] = "";
-    }
-    if (priority != null) {
-        dataObject['priority_text'] = dataSources['priority'][priority];
-    }
-    else {
-        dataObject['priority_text'] = "";
+    var fields_to_check = ['responsible', 'author', 'tasklist', 'priority'];
+    for (var i in fields_to_check) {
+        dataObject = addTextFieldsFromIds(dataObject, fields_to_check[i]);
     }
     return dataObject;
 }
@@ -578,7 +574,6 @@ $(document).ready(function () {
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
             "data": dataSet,
-            rowId: 'ID',
             "columns": [
                 {"data": "ID"},
                 {"data": "title"},
