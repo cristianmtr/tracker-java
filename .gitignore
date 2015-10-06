@@ -3,3 +3,4 @@
 lib/
 tracker_java.iml
 tmp/*
+target/*
