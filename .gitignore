@@ -2,3 +2,4 @@
 .idea/
 lib/
 tracker_java.iml
+tmp/*
