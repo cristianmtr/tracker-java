@@ -1,4 +1,4 @@
-package tracker_java;
+package tracker_java.Models;
 
 import javax.persistence.*;
 

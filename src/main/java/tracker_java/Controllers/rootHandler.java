@@ -1,9 +1,10 @@
-package tracker_java;
+package tracker_java.Controllers;
 
 import java.io.*;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import tracker_java.Utilities.StringFromFilePathReader;
 
 public class rootHandler implements HttpHandler {
 

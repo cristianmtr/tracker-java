@@ -1,4 +1,4 @@
-package tracker_java;
+package tracker_java.Test;
 
 import junit.framework.TestCase;
 
@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import tracker_java.Models.TaskObject;
 
 import java.util.List;
 

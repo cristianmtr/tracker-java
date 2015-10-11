@@ -1,8 +1,9 @@
-package tracker_java;
+package tracker_java.Controllers;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import tracker_java.Utilities.StringFromFilePathReader;
 
 import java.io.IOException;
 import java.io.OutputStream;
