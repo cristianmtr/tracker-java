@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.sun.net.httpserver.*;
-import tracker_java.Controllers.jsonHandler;
+import tracker_java.Controllers.*;
 
 public class MainServer {
 
@@ -24,6 +24,7 @@ public class MainServer {
 //		server.createContext("/", new rootHandler());
 //		server.createContext("/static", new staticHandler());
 		server.createContext("/json", new jsonHandler());
+		server.createContext("/task", new taskEndpointHandler());
 
 
 		server.start();
