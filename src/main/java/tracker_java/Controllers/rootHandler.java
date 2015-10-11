@@ -8,7 +8,6 @@ import tracker_java.Utilities.StringFromFilePathReader;
 
 public class rootHandler implements HttpHandler {
 
-    @Override
     public void handle(HttpExchange arg0) throws IOException {
         System.out.println("request at / ");
         String data = null;
