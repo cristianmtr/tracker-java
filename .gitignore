@@ -4,3 +4,4 @@ lib/
 tracker_java.iml
 tmp/*
 target/*
+src/main/resources/hibernate.cfg.xml
