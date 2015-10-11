@@ -1,5 +1,3 @@
-package tracker_java.Test;
-
 import junit.framework.TestCase;
 
 import org.hibernate.Session;
@@ -17,7 +15,6 @@ import java.util.List;
 public class TestHibernate extends TestCase {
     private SessionFactory sf;
 
-    @Override
     protected void setUp() throws Exception {
         // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -34,7 +31,6 @@ public class TestHibernate extends TestCase {
         }
     }
 
-    @Override
     protected void tearDown() throws Exception {
         if ( sf != null ) {
             sf.close();
