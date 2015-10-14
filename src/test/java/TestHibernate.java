@@ -5,7 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import tracker_java.Models.TaskObject;
+import tracker_java.Models.Item;
 
 import java.util.List;
 
@@ -41,9 +41,9 @@ public class TestHibernate extends TestCase {
     public void testBasicUsage() {
         Session session = sf.openSession();
         session.beginTransaction();
-        List result = session.createQuery( "from TaskObject" ).list();
-        for ( TaskObject task : (List<TaskObject>) result ) {
-          System.out.format("task: id %d, title = %s %n", task.DT_RowId, task.title);
+        List result = session.createQuery( "from Item" ).list();
+        for ( Item task : (List<Item>) result ) {
+          System.out.format("task: id %d, title = %s %n", task.getItemId(), task.getTitle());
         }
         session.getTransaction().commit();
         session.close();

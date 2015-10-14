@@ -6,8 +6,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.hibernate.Session;
 import tracker_java.Models.HibernateUtil;
-import tracker_java.Models.MemberObject;
-import tracker_java.Models.TasklistObject;
+import tracker_java.Models.Member;
+import tracker_java.Models.Project;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,7 +22,7 @@ public class jsonHandler implements HttpHandler {
     private List getAllTasks() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        List tasks = session.createQuery("from TaskObject ").list();
+        List tasks = session.createQuery("from Item ").list();
 //        for (TaskObject task: (List<TaskObject>) tasks){
 //            task.DT_RowId = task.ID;
 //        }
@@ -34,23 +34,23 @@ public class jsonHandler implements HttpHandler {
         HashMap dataSources = new HashMap();
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        List membersList = session.createQuery("from MemberObject").list();
+        List membersList = session.createQuery("from Member").list();
         session.flush();
         session.close();
 
         HashMap members = new HashMap();
-        for (MemberObject member : (List<MemberObject>) membersList) {
-            members.put(member.id, member.name);
+        for (Member member : (List<Member>) membersList) {
+            members.put(member.getMemberId(), member.getFirstName());
         }
 
         session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        List tasklistsList = session.createQuery("from TasklistObject ").list();
+        List tasklistsList = session.createQuery("from Item ").list();
         session.close();
 
         HashMap tasklists = new HashMap();
-        for (TasklistObject tasklist : (List<TasklistObject>)tasklistsList) {
-            tasklists.put(tasklist.id, tasklist.name);
+        for (Project tasklist : (List<Project>)tasklistsList) {
+            tasklists.put(tasklist.getProjectId(), tasklist.getName());
         }
 
         HashMap priorities = new HashMap();
