@@ -14,16 +14,16 @@
     <session-factory>
 
         <!-- Database connection settings -->
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/DB_NAME</property>
-        <property name="connection.username">YOUR_USERNAME</property>
-        <property name="connection.password">YOUR_PASSWORD</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/tracker</property>
+        <property name="connection.username">USERNAME</property>
+        <property name="connection.password">PASSWORD</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
 
         <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
 
         <!-- Disable the second-level cache  -->
         <!--<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>-->
@@ -35,9 +35,13 @@
         <!--<property name="hbm2ddl.auto">create</property>-->
 
         <!-- Names the annotated entity class -->
-        <mapping class="tracker_java.Models.TaskObject"/>
-        <mapping class="tracker_java.Models.MemberObject"/>
-        <mapping class="tracker_java.Models.TasklistObject"/>
+        <mapping class="tracker_java.Models.Item"/>
+        <mapping class="tracker_java.Models.Member"/>
+        <mapping class="tracker_java.Models.ItemComment"/>
+        <mapping class="tracker_java.Models.MemberProject"/>
+        <mapping class="tracker_java.Models.MemberProjectPK"/>
+        <mapping class="tracker_java.Models.Project"/>
+        <mapping class="tracker_java.Models.ProjectStatus"/>
 
     </session-factory>
 
