@@ -45,7 +45,7 @@ public class jsonHandler implements HttpHandler {
 
         session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        List tasklistsList = session.createQuery("from Item ").list();
+        List tasklistsList = session.createQuery("from Project ").list();
         session.close();
 
         HashMap tasklists = new HashMap();
@@ -99,6 +99,7 @@ public class jsonHandler implements HttpHandler {
 
         OutputStream res = httpExchange.getResponseBody();
         try {
+            System.out.format("Replying with %s", resultAsJson);
             res.write(resultAsJson.getBytes());
         } catch (IOException e) {
             e.printStackTrace();

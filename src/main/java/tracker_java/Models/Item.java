@@ -19,13 +19,13 @@ public class Item implements Serializable {
 	private Integer itemId;
 
 	@Column(name="\"authorId\"")
-	private Integer authorId;
+	private Integer author;
 
 	private String context;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="\"deadlineDate\"")
-	private Date deadlineDate;
+	private Date deadline;
 
 	private String description;
 
@@ -33,7 +33,7 @@ public class Item implements Serializable {
 	private Integer itemParentId;
 
 	@Column(name="\"memberId\"")
-	private Integer memberId;
+	private Integer responsible;
 
 	private Integer priority;
 
@@ -53,12 +53,12 @@ public class Item implements Serializable {
 		this.itemId = itemId;
 	}
 
-	public Integer getAuthorId() {
-		return this.authorId;
+	public Integer getAuthor() {
+		return this.author;
 	}
 
-	public void setAuthorId(Integer authorId) {
-		this.authorId = authorId;
+	public void setAuthor(Integer author) {
+		this.author = author;
 	}
 
 	public String getContext() {
@@ -69,12 +69,12 @@ public class Item implements Serializable {
 		this.context = context;
 	}
 
-	public Date getDeadlineDate() {
-		return this.deadlineDate;
+	public Date getDeadline() {
+		return this.deadline;
 	}
 
-	public void setDeadlineDate(Date deadlineDate) {
-		this.deadlineDate = deadlineDate;
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
 	}
 
 	public String getDescription() {
@@ -93,12 +93,12 @@ public class Item implements Serializable {
 		this.itemParentId = itemParentId;
 	}
 
-	public Integer getMemberId() {
-		return this.memberId;
+	public Integer getResponsible() {
+		return responsible;
 	}
 
-	public void setMemberId(Integer memberId) {
-		this.memberId = memberId;
+	public void setResponsible(Integer responsible) {
+		this.responsible = responsible;
 	}
 
 	public Integer getPriority() {
