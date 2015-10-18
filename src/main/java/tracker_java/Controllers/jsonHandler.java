@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.Member;
 import tracker_java.Models.Project;
+import tracker_java.Utilities.JsonResponseHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,9 +24,6 @@ public class jsonHandler implements HttpHandler {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         List tasks = session.createQuery("from Item ").list();
-//        for (TaskObject task: (List<TaskObject>) tasks){
-//            task.DT_RowId = task.ID;
-//        }
         session.close();
         return tasks;
     }
@@ -81,34 +79,6 @@ public class jsonHandler implements HttpHandler {
         result.put("data", tasks);
         result.put("dataSources", dataSources);
 
-        com.fasterxml.jackson.databind.ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String resultAsJson = null;
-        try {
-            resultAsJson = ow.writeValueAsString(result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Headers headers = httpExchange.getResponseHeaders();
-        headers.add("Content-type","text/json");
-
-        try {
-            httpExchange.sendResponseHeaders(200, resultAsJson.getBytes().length);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        OutputStream res = httpExchange.getResponseBody();
-        try {
-            System.out.format("Replying with %s", resultAsJson);
-            res.write(resultAsJson.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            res.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        httpExchange.close();
+        JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, result);
     }
 }
