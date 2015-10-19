@@ -50,6 +50,7 @@ public class taskEndpointHandler implements HttpHandler {
         Query q = s.createQuery("from ItemComment where itemId = :taskId").setParameter("taskId", taskId);
         List l = q.list();
         HashMap response = new HashMap();
+
         response.put("code", "200");
         response.put("data", l);
         JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, response);

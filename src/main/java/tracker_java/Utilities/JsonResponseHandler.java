@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 
 /**
  * returns JSON replies from the specified Object
@@ -14,7 +15,9 @@ public enum JsonResponseHandler {
     INSTANCE;
 
     public void replyWithJsonFromObject(HttpExchange httpExchange, Object theObject) {
-        com.fasterxml.jackson.databind.ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        ObjectMapper om = new ObjectMapper();
+        om.setDateFormat(new SimpleDateFormat("EEE, dd MMM YYYY HH:mm:ss z"));
+        com.fasterxml.jackson.databind.ObjectWriter ow = om.writer().withDefaultPrettyPrinter();
         String resultAsJson = null;
         try {
             resultAsJson = ow.writeValueAsString(theObject);
