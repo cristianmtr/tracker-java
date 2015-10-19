@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 /**
  * returns JSON replies from the specified Object
@@ -16,7 +17,9 @@ public enum JsonResponseHandler {
 
     public void replyWithJsonFromObject(HttpExchange httpExchange, Object theObject) {
         ObjectMapper om = new ObjectMapper();
-        om.setDateFormat(new SimpleDateFormat("EEE, dd MMM YYYY HH:mm:ss z"));
+        SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.MSZ");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        om.setDateFormat(df);
         com.fasterxml.jackson.databind.ObjectWriter ow = om.writer().withDefaultPrettyPrinter();
         String resultAsJson = null;
         try {
