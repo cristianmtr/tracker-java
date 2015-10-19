@@ -45,16 +45,24 @@ public class taskEndpointHandler implements HttpHandler {
     }
 
     public void handleGetComments(HttpExchange httpExchange, int taskId) {
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery("from ItemComment where itemId = :taskId").setParameter("taskId", taskId);
+        List l = q.list();
         HashMap response = new HashMap();
         response.put("code", "200");
-        response.put("data", String.format("task %d comments", taskId));
+        response.put("data", l);
         JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, response);
     }
 
     public void handleGetHistory(HttpExchange httpExchange, int taskId) {
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery("from ItemStatus where itemId = :taskId").setParameter("taskId", taskId);
+        List l = q.list();
         HashMap response = new HashMap();
         response.put("code", "200");
-        response.put("data", String.format("task %d history", taskId));
+        response.put("data", l);
         JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, response);
     }
 
