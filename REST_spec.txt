@@ -9,6 +9,8 @@ FORMAT:
 		"data": {}
 	}
 
-NOTE: 
-	"data" will contain either one item, or a list of items, depending on endpoint;
-	when the endpoint should only return ONE item, a 500 error will be returned instead;
+NOTES:
+	- "data" will contain either one item, or a list of items, depending on endpoint;
+		- when the endpoint should only return ONE item, a 500 error will be returned instead;
+	- datetime fields will have the format: "Wed, 01 Oct 2014 09:36:21 GMT";
+
