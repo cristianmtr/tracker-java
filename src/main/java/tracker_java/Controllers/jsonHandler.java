@@ -10,6 +10,10 @@ import tracker_java.Models.Member;
 import tracker_java.Models.Project;
 import tracker_java.Utilities.JsonResponseHandler;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -18,7 +22,8 @@ import java.util.List;
 /**
  * Created by cristian on 10/4/15.
  */
-public class jsonHandler implements HttpHandler {
+@Path("json")
+public class jsonHandler {
 
     private List getAllTasks() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -69,7 +74,9 @@ public class jsonHandler implements HttpHandler {
         return dataSources;
     }
 
-    public void handle(HttpExchange httpExchange) {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String handle(HttpExchange httpExchange) {
         System.out.println("request at /json");
 
         List tasks = this.getAllTasks();
@@ -79,6 +86,6 @@ public class jsonHandler implements HttpHandler {
         result.put("data", tasks);
         result.put("dataSources", dataSources);
 
-        JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, result);
+        return JsonResponseHandler.INSTANCE.JsonFromObject(result);
     }
 }

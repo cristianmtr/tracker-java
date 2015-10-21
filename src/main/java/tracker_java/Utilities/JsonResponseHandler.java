@@ -15,6 +15,28 @@ import java.util.TimeZone;
 public enum JsonResponseHandler {
     INSTANCE;
 
+    public String JsonFromObject(Object theObject) {
+        ObjectMapper om = new ObjectMapper();
+        SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.MSZ");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        om.setDateFormat(df);
+        com.fasterxml.jackson.databind.ObjectWriter ow = om.writer().withDefaultPrettyPrinter();
+        String resultAsJson = null;
+        try {
+            resultAsJson = ow.writeValueAsString(theObject);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (resultAsJson != null) {
+            return resultAsJson;
+        }
+
+        System.out.format("ERROR 500: resultAsJson was null%n");
+        return null;
+    }
+
+
     public void replyWithJsonFromObject(HttpExchange httpExchange, Object theObject) {
         ObjectMapper om = new ObjectMapper();
         SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.MSZ");
@@ -51,8 +73,7 @@ public enum JsonResponseHandler {
                 e.printStackTrace();
             }
             httpExchange.close();
-        }
-        else {
+        } else {
             System.out.format("ERROR 500: resultAsJson was null when requesting %s%n", httpExchange.getRequestURI().toString());
             errorHandler.INSTANCE.returnServerError(httpExchange);
         }
