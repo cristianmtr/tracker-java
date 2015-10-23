@@ -36,6 +36,7 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="tracker_java.Models.Item"/>
+        <mapping class="tracker_java.Models.ItemStatus"/>
         <mapping class="tracker_java.Models.Member"/>
         <mapping class="tracker_java.Models.ItemComment"/>
         <mapping class="tracker_java.Models.MemberProject"/>
