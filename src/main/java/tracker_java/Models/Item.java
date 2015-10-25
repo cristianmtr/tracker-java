@@ -11,14 +11,14 @@ import java.util.Date;
  * 
  */
 @Entity
-@NamedQuery(name="Item.findAll", query="SELECT i FROM Item i")
 @XmlRootElement
 public class Item implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="\"itemId\"")
-	private Integer itemId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique=true, insertable=false)
+	private Integer id;
 
 	@Column(name="\"authorId\"")
 	private Integer author;
@@ -48,11 +48,11 @@ public class Item implements Serializable {
 	}
 
 	public Integer getItemId() {
-		return this.itemId;
+		return this.id;
 	}
 
 	public void setItemId(Integer itemId) {
-		this.itemId = itemId;
+		this.id = itemId;
 	}
 
 	public Integer getAuthor() {

@@ -2,8 +2,10 @@ package tracker_java.Controllers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.glassfish.jersey.internal.util.PropertiesClass;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.JSONObject;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.Item;
@@ -51,12 +53,17 @@ public class taskEndpointHandler{
     @Path("")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response handlePostNewTask(JSONObject jsonObject) {
-        Item newTask = new Item();
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response handlePostNewTask(Item jsonObject) {
         Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        return Response.status(201).entity("PLACEHOLDER ID").build();
+        Transaction tx = s.beginTransaction();
+        Integer newId = (Integer)s.save(jsonObject);
+        s.flush();
+        tx.commit();
+        s.close();
+        HashMap res = new HashMap();
+        res.put("id", newId);
+        return Response.status(201).entity(JsonResponseHandler.INSTANCE.JsonFromObject(res)).build();
     }
 
     @Path("{id}/comments")
@@ -65,7 +72,7 @@ public class taskEndpointHandler{
     public Response handleGetComments(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q = s.createQuery("from ItemComment where itemId = :taskId").setParameter("taskId", taskId);
+        Query q = s.createQuery("from ItemComment where id = :taskId").setParameter("taskId", taskId);
         return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(q.list())).build();
     }
 
@@ -75,7 +82,7 @@ public class taskEndpointHandler{
     public Response handleGetHistory(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q = s.createQuery("from ItemStatus where itemId = :taskId").setParameter("taskId", taskId);
+        Query q = s.createQuery("from ItemStatus where id = :taskId").setParameter("taskId", taskId);
         return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(q.list())).build();
     }
 
@@ -85,7 +92,7 @@ public class taskEndpointHandler{
     public Response handleGetTask(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query query = s.createQuery("from Item where itemId = :taskId").setParameter("taskId", taskId);
+        Query query = s.createQuery("from Item where id = :taskId").setParameter("taskId", taskId);
         List list = query.list();
         if (list.size() > 1)
         {
