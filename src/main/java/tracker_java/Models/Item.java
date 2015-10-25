@@ -2,6 +2,7 @@ package tracker_java.Models;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 @Entity
 @NamedQuery(name="Item.findAll", query="SELECT i FROM Item i")
+@XmlRootElement
 public class Item implements Serializable {
 	private static final long serialVersionUID = 1L;
 

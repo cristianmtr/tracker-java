@@ -17,7 +17,7 @@ public enum JsonResponseHandler {
 
     public String JsonFromObject(Object theObject) {
         ObjectMapper om = new ObjectMapper();
-        SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS.MSZ");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         om.setDateFormat(df);
         com.fasterxml.jackson.databind.ObjectWriter ow = om.writer().withDefaultPrettyPrinter();
