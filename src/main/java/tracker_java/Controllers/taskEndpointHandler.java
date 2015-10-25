@@ -45,9 +45,19 @@ public class taskEndpointHandler{
         JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, res);
     }
 
-    private void handleUpdateTask(HttpExchange httpExchange, int taskId) {
-        String res = "update existing";
-        JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, res);
+    @Path("{id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response handleUpdateTask(@PathParam("id") int taskId, Item newTask) {
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = s.beginTransaction();
+        newTask.setItemId(taskId);
+        s.merge(newTask);
+        s.flush();
+        tx.commit();
+        s.close();
+        return Response.status(200).build();
     }
 
     @Path("")
@@ -92,14 +102,12 @@ public class taskEndpointHandler{
     public Response handleGetTask(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query query = s.createQuery("from Item where id = :taskId").setParameter("taskId", taskId);
-        List list = query.list();
-        if (list.size() > 1)
-        {
-            System.out.format("WARNING: MORE THAN ONE TASK WITH ID %d FOUND", taskId);
+        Item theOne = s.get(Item.class, taskId);
+        if (theOne != null ) {
+            return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(theOne)).build();
         }
-        Item theOne = (Item) list.get(0);
-        return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(theOne)).build();
-//        return theOne;
+        else {
+            return Response.status(404).build();
+        }
     }
 }
