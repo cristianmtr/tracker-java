@@ -1,8 +1,10 @@
 package tracker_java;
 
+import com.owlike.genson.ext.jaxrs.GensonJsonConverter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import tracker_java.Utilities.JsonDeserializerProvider;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,6 +24,7 @@ public class MainServer {
 	public static HttpServer startServer() {
 		// create a resource config that scans for JAX-RS resources and providers
 		final ResourceConfig rc = new ResourceConfig().packages(true, "tracker_java");
+		rc.register(GensonJsonConverter.class);
 
 		// create and start a new instance of grizzly http server
 		// exposing the Jersey application at BASE_URI

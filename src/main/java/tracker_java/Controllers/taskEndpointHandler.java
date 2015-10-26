@@ -60,7 +60,6 @@ public class taskEndpointHandler{
         return Response.status(200).build();
     }
 
-    @Path("")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,7 +72,7 @@ public class taskEndpointHandler{
         s.close();
         HashMap res = new HashMap();
         res.put("id", newId);
-        return Response.status(201).entity(JsonResponseHandler.INSTANCE.JsonFromObject(res)).build();
+        return Response.status(201).entity(res).build();
     }
 
     @Path("{id}/comments")
@@ -81,9 +80,11 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetComments(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
-        s.beginTransaction();
-        Query q = s.createQuery("from ItemComment where id = :taskId").setParameter("taskId", taskId);
-        return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(q.list())).build();
+        Transaction tx=s.beginTransaction();
+        Query q = s.createQuery("from ItemComment where itemId = :taskId").setParameter("taskId", taskId);
+        List theList = q.list();
+        s.close();
+        return Response.status(200).entity(theList).build();
     }
 
     @Path("{id}/history")
@@ -92,8 +93,10 @@ public class taskEndpointHandler{
     public Response handleGetHistory(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q = s.createQuery("from ItemStatus where id = :taskId").setParameter("taskId", taskId);
-        return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(q.list())).build();
+        Query q = s.createQuery("from ItemStatus where itemId = :taskId").setParameter("taskId", taskId);
+        List theList = q.list();
+        s.close();
+        return Response.status(200).entity(theList).build();
     }
 
     @Path("{id}")
@@ -103,8 +106,9 @@ public class taskEndpointHandler{
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
         Item theOne = s.get(Item.class, taskId);
+        s.close();
         if (theOne != null ) {
-            return Response.status(200).entity(JsonResponseHandler.INSTANCE.JsonFromObject(theOne)).build();
+            return Response.status(200).entity(theOne).build();
         }
         else {
             return Response.status(404).build();
