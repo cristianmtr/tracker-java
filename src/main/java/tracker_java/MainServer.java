@@ -4,7 +4,6 @@ import com.owlike.genson.ext.jaxrs.GensonJsonConverter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import tracker_java.Utilities.JsonDeserializerProvider;
 
 import java.io.IOException;
 import java.net.URI;

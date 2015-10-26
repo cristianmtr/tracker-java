@@ -1,25 +1,15 @@
 package tracker_java.Controllers;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import org.glassfish.jersey.internal.util.PropertiesClass;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.json.JSONObject;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.Item;
-import tracker_java.Models.ItemComment;
-import tracker_java.Models.ItemStatus;
-import tracker_java.Utilities.JsonResponseHandler;
-import tracker_java.Utilities.errorHandler;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,13 +26,11 @@ import java.util.List;
 public class taskEndpointHandler{
 
     private void handlePostComments(HttpExchange httpExchange, int taskId) {
-        String res = "post comment";
-        JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, res);
+        //
     }
 
     private void handlePostHistory(HttpExchange httpExchange, int taskId) {
-        String res = "post history";
-        JsonResponseHandler.INSTANCE.replyWithJsonFromObject(httpExchange, res);
+        //
     }
 
     @Path("{id}")

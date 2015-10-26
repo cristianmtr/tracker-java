@@ -1,21 +1,16 @@
 package tracker_java.Controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import org.hibernate.Session;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.Member;
 import tracker_java.Models.Project;
-import tracker_java.Utilities.JsonResponseHandler;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.io.OutputStream;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,7 +71,7 @@ public class jsonHandler {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String handle(HttpExchange httpExchange) {
+    public Response handle(HttpExchange httpExchange) {
         System.out.println("request at /json");
 
         List tasks = this.getAllTasks();
@@ -86,6 +81,6 @@ public class jsonHandler {
         result.put("data", tasks);
         result.put("dataSources", dataSources);
 
-        return JsonResponseHandler.INSTANCE.JsonFromObject(result);
+        return Response.status(200).entity(result).build();
     }
 }
