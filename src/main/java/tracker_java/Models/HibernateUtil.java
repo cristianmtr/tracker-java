@@ -11,6 +11,8 @@ public class HibernateUtil {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
             return new Configuration()
+                    .setProperty("hibernate.connection.username", System.getenv("PSQLUSER"))
+                    .setProperty("hibernate.connection.password", System.getenv("PSQLPASSWORD"))
                     .configure()
                     .buildSessionFactory();
         } catch (Throwable ex) {
