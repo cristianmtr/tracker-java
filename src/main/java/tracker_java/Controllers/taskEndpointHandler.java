@@ -48,6 +48,7 @@ public class taskEndpointHandler{
         return Response.status(200).build();
     }
 
+    @Path("new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
