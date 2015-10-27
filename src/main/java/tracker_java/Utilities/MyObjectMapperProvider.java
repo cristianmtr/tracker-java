@@ -47,7 +47,7 @@ public class MyObjectMapperProvider implements ContextResolver<ObjectMapper> {
     private static ObjectMapper createDefaultMapper() {
         final ObjectMapper result = new ObjectMapper();
         result.enable(SerializationFeature.INDENT_OUTPUT);
-
+        result.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return result;
     }
 
