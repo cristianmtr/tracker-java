@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.Item;
+import tracker_java.Models.ItemComment;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -25,8 +26,22 @@ import java.util.List;
 @Path("task")
 public class taskEndpointHandler{
 
-    private void handlePostComments(HttpExchange httpExchange, int taskId) {
-        //
+    @POST
+    @Path("{id}/comments/new")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response handlePostNewComment(@PathParam("id") int taskId, ItemComment newComment) {
+        newComment.setItemId(taskId);
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = s.beginTransaction();
+        Integer newCommentId = (Integer)s.save(newComment);
+        s.flush();
+        tx.commit();
+        s.close();
+        HashMap res = new HashMap();
+        res.put("id", newCommentId);
+        return Response.status(201).entity(res).build();
+
     }
 
     private void handlePostHistory(HttpExchange httpExchange, int taskId) {
