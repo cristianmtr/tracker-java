@@ -1,46 +1,43 @@
 package tracker_java;
 
-import com.owlike.genson.ext.jaxrs.GensonJsonConverter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main class.
- *
  */
 public class MainServer {
-	// Base URI the Grizzly HTTP server will listen on
-	public static final String BASE_URI = "http://localhost:8000/";
+    // Base URI the Grizzly HTTP server will listen on
+    private static final URI BASE_URI = URI.create("http://localhost:8000/");
 
-	/**
-	 * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
-	 * @return Grizzly HTTP server.
-	 */
-	public static HttpServer startServer() {
-		// create a resource config that scans for JAX-RS resources and providers
-		final ResourceConfig rc = new ResourceConfig().packages(true, "tracker_java");
-		rc.register(GensonJsonConverter.class);
+    public static void main(String[] args) {
+        try {
+            System.out.println("task tracker enterprise Edition running");
 
-		// create and start a new instance of grizzly http server
-		// exposing the Jersey application at BASE_URI
-		return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
-	}
+            final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, createApp(), false);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                server.shutdownNow();
+            }));
+            server.start();
 
-	/**
-	 * Main method.
-	 * @param args
-	 * @throws IOException
-	 */
-	public static void main(String[] args) throws IOException {
-		final HttpServer server = startServer();
-		System.out.println(String.format("Jersey app started with WADL available at "
-				+ "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
-		System.in.read();
-		server.stop();
-	}
+            System.out.println(String.format("Application started.%nStop the application using CTRL+C"));
+
+            Thread.currentThread().join();
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(MainServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static ResourceConfig createApp() {
+        return new Configuration();
+    }
 }
+
 
