@@ -17,7 +17,8 @@ public class ItemcommentEntity {
     private Timestamp lastchangedate;
 
     @Id
-    @Column(name = "ITEMCOMMENTID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ITEMCOMMENTID", unique=true, insertable=false)
     public Integer getItemcommentid() {
         return itemcommentid;
     }

@@ -1,8 +1,6 @@
 package tracker_java.Models;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -14,7 +12,8 @@ public class MemberEntity {
     private Integer memberid;
 
     @Id
-    @javax.persistence.Column(name = "MEMBERID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @javax.persistence.Column(name = "MEMBERID", unique=true, insertable=false)
     public Integer getMemberid() {
         return memberid;
     }

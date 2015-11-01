@@ -16,7 +16,8 @@ public class ItemstatusEntity {
     private Integer memberid;
 
     @Id
-    @Column(name = "ITEMSTATUSID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ITEMSTATUSID", unique=true, insertable=false)
     public Long getItemstatusid() {
         return itemstatusid;
     }

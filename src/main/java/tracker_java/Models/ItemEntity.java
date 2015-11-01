@@ -21,7 +21,8 @@ public class ItemEntity {
     private Integer authorid;
 
     @Id
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", unique=true, insertable=false)
     public Integer getId() {
         return id;
     }
