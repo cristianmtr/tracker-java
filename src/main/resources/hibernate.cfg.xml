@@ -23,7 +23,7 @@
         <property name="connection.pool_size">1</property>
 
         <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
+        <!--<property name="dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>-->
 
         <!-- Disable the second-level cache  -->
         <!--<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>-->
@@ -36,14 +36,14 @@
         <!--<property name="hbm2ddl.auto">create</property>-->
 
         <!-- Names the annotated entity class -->
-        <mapping class="tracker_java.Models.Item"/>
-        <mapping class="tracker_java.Models.ItemStatus"/>
-        <mapping class="tracker_java.Models.Member"/>
-        <mapping class="tracker_java.Models.ItemComment"/>
-        <mapping class="tracker_java.Models.MemberProject"/>
-        <mapping class="tracker_java.Models.MemberProjectPK"/>
-        <mapping class="tracker_java.Models.Project"/>
-        <mapping class="tracker_java.Models.ProjectStatus"/>
+        <mapping class="tracker_java.Models.ItemEntity"/>
+        <mapping class="tracker_java.Models.ItemstatusEntity"/>
+        <mapping class="tracker_java.Models.MemberEntity"/>
+        <mapping class="tracker_java.Models.ItemcommentEntity"/>
+        <mapping class="tracker_java.Models.MemberprojectEntity"/>
+        <mapping class="tracker_java.Models.MemberprojectEntityPK"/>
+        <mapping class="tracker_java.Models.ProjectEntity"/>
+        <mapping class="tracker_java.Models.ProjectstatusEntity"/>
 
     </session-factory>
 

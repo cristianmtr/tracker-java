@@ -5,8 +5,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import tracker_java.Models.HibernateUtil;
-import tracker_java.Models.Item;
-import tracker_java.Models.ItemComment;
+import tracker_java.Models.ItemEntity;
+import tracker_java.Models.ItemcommentEntity;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -30,8 +30,8 @@ public class taskEndpointHandler{
     @Path("{id}/comments/new")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostNewComment(@PathParam("id") int taskId, ItemComment newComment) {
-        newComment.setItemId(taskId);
+    public Response handlePostNewComment(@PathParam("id") int taskId, ItemcommentEntity newComment) {
+        newComment.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         Integer newCommentId = (Integer)s.save(newComment);
@@ -52,10 +52,10 @@ public class taskEndpointHandler{
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleUpdateTask(@PathParam("id") int taskId, Item newTask) {
+    public Response handleUpdateTask(@PathParam("id") int taskId, ItemEntity newTask) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
-        newTask.setItemId(taskId);
+        newTask.setId(taskId);
         s.merge(newTask);
         s.flush();
         tx.commit();
@@ -67,7 +67,7 @@ public class taskEndpointHandler{
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostNewTask(Item jsonObject) {
+    public Response handlePostNewTask(ItemEntity jsonObject) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         Integer newId = (Integer)s.save(jsonObject);
@@ -84,9 +84,10 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetComments(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx=s.beginTransaction();
-        Query q = s.createQuery("from ItemComment where itemId = :taskId").setParameter("taskId", taskId);
+        Transaction tx = s.beginTransaction();
+        Query q = s.createQuery("from ItemcommentEntity where itemcommentid = :taskId").setParameter("taskId", taskId);
         List theList = q.list();
+        tx.commit();
         s.close();
         return Response.status(200).entity(theList).build();
     }
@@ -97,7 +98,7 @@ public class taskEndpointHandler{
     public Response handleGetHistory(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q = s.createQuery("from ItemStatus where itemId = :taskId").setParameter("taskId", taskId);
+        Query q = s.createQuery("from ItemstatusEntity  where itemid = :taskId").setParameter("taskId", taskId);
         List theList = q.list();
         s.close();
         return Response.status(200).entity(theList).build();
@@ -109,7 +110,8 @@ public class taskEndpointHandler{
     public Response handleGetTask(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Item theOne = s.get(Item.class, taskId);
+        Query theOneq = s.createQuery("from ItemEntity where id = :taskId").setParameter("taskId", taskId);
+        ItemEntity theOne = (ItemEntity) theOneq.list().get(0);
         s.close();
         if (theOne != null ) {
             return Response.status(200).entity(theOne).build();
