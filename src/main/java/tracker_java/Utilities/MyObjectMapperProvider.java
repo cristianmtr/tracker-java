@@ -20,28 +20,15 @@ import tracker_java.Models.Item;
 public class MyObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
     final ObjectMapper defaultObjectMapper;
-    final ObjectMapper combinedObjectMapper;
 
     public MyObjectMapperProvider() {
         defaultObjectMapper = createDefaultMapper();
-        combinedObjectMapper = createCombinedObjectMapper();
     }
 
     @Override
     public ObjectMapper getContext(final Class<?> type) {
 
-        if (type == Item.class) {
-            return combinedObjectMapper;
-        } else {
-            return defaultObjectMapper;
-        }
-    }
-
-    private static ObjectMapper createCombinedObjectMapper() {
-        return new ObjectMapper()
-                .configure(SerializationFeature.WRAP_ROOT_VALUE, true)
-                .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)
-                .setAnnotationIntrospector(createJaxbJacksonAnnotationIntrospector());
+        return defaultObjectMapper;
     }
 
     private static ObjectMapper createDefaultMapper() {
