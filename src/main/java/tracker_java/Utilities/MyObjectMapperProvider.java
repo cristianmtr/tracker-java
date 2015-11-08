@@ -10,6 +10,10 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 
 /**
  * Created by cristian on 10/26/15.
@@ -31,8 +35,10 @@ public class MyObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
     private static ObjectMapper createDefaultMapper() {
         final ObjectMapper result = new ObjectMapper();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         result.enable(SerializationFeature.INDENT_OUTPUT);
-        result.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        result.setDateFormat(dateFormat);
         return result;
     }
 
