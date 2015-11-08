@@ -411,25 +411,25 @@
     </pluginRepositories>
 
     <build>
-        <sourceDirectory>/home/cristian/dev/jtracker/src/main/java</sourceDirectory>
-        <scriptSourceDirectory>/home/cristian/dev/jtracker/src/main/scripts</scriptSourceDirectory>
-        <testSourceDirectory>/home/cristian/dev/jtracker/src/test/java</testSourceDirectory>
-        <outputDirectory>/home/cristian/dev/jtracker/target/classes</outputDirectory>
-        <testOutputDirectory>/home/cristian/dev/jtracker/target/test-classes</testOutputDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <outputDirectory>target/classes</outputDirectory>
+        <testOutputDirectory>target/test-classes</testOutputDirectory>
 
         <resources>
             <resource>
-                <directory>/home/cristian/dev/jtracker/src/main/resources</directory>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
 
         <testResources>
             <testResource>
-                <directory>/home/cristian/dev/jtracker/src/test/resources</directory>
+                <directory>src/test/resources</directory>
             </testResource>
         </testResources>
 
-        <directory>/home/cristian/dev/jtracker/target</directory>
+        <directory>target</directory>
         <finalName>tracker_java-1</finalName>
 
         <pluginManagement>
@@ -600,7 +600,7 @@
                             <goal>site</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>/home/cristian/dev/jtracker/target/site</outputDirectory>
+                            <outputDirectory>target/site</outputDirectory>
                             <reportPlugins>
                                 <reportPlugin>
                                     <groupId>org.apache.maven.plugins</groupId>
@@ -616,7 +616,7 @@
                             <goal>deploy</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>/home/cristian/dev/jtracker/target/site</outputDirectory>
+                            <outputDirectory>target/site</outputDirectory>
                             <reportPlugins>
                                 <reportPlugin>
                                     <groupId>org.apache.maven.plugins</groupId>
@@ -627,7 +627,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>/home/cristian/dev/jtracker/target/site</outputDirectory>
+                    <outputDirectory>target/site</outputDirectory>
                     <reportPlugins>
                         <reportPlugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -640,6 +640,6 @@
     </build>
 
     <reporting>
-        <outputDirectory>/home/cristian/dev/jtracker/target/site</outputDirectory>
+        <outputDirectory>target/site</outputDirectory>
     </reporting>
 </project>

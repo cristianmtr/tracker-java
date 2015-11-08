@@ -85,7 +85,7 @@ public class taskEndpointHandler{
     public Response handleGetComments(@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
-        Query q = s.createQuery("from ItemcommentEntity where itemcommentid = :taskId").setParameter("taskId", taskId);
+        Query q = s.createQuery("from ItemcommentEntity where itemid = :taskId").setParameter("taskId", taskId);
         List theList = q.list();
         tx.commit();
         s.close();
