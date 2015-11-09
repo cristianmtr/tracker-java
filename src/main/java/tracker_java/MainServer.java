@@ -20,6 +20,8 @@ public class MainServer {
         try {
             System.out.println("task tracker enterprise Edition running");
 
+            System.out.format("wadl available at %sapplication.wadl%n", BASE_URI);
+
             final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, createApp(), false);
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 server.shutdownNow();
