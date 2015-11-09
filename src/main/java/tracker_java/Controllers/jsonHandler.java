@@ -71,7 +71,7 @@ public class jsonHandler {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle(HttpExchange httpExchange) {
+    public Response handle() {
         System.out.println("request at /json");
 
         List tasks = this.getAllTasks();
