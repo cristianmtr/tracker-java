@@ -14,3 +14,28 @@ NOTES:
 		- when the endpoint should only return ONE item, a 500 error will be returned instead;
 	- datetime fields will have the format: "Wed, 01 Oct 2014 09:36:21 GMT";
 
+Authentication
+
+/user/
+
+/new
+	reply with form
+	contains required fields, including password
+	do validation
+	hash password with salt
+	???
+	store
+	return ok or not
+
+/login
+	send username password in HTTP Authorization field
+	generate token
+
+SecureRandom random = new SecureRandom();
+byte bytes[] = new byte[20];
+random.nextBytes(bytes);
+String token = bytes.toString();
+
+	all subsequent requests would include the token in HTTP Authorization field
+
+
