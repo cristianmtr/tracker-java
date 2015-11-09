@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.ItemEntity;
 import tracker_java.Models.ItemcommentEntity;
+import tracker_java.Models.ItemstatusEntity;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -44,8 +45,21 @@ public class taskEndpointHandler{
 
     }
 
-    private void handlePostHistory(HttpExchange httpExchange, int taskId) {
-        //
+    @Path("{id}/history/new")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response handlePostHistory(@PathParam("id") int taskId, ItemstatusEntity newStatus) {
+        newStatus.setItemid(taskId);
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = s.beginTransaction();
+        Long newId = (Long)s.save(newStatus);
+        s.flush();
+        tx.commit();
+        s.close();
+        HashMap res = new HashMap();
+        res.put("id", newId);
+        return  Response.status(201).entity(res).build();
     }
 
     @Path("{id}")
