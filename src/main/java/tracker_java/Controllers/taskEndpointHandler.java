@@ -74,7 +74,7 @@ public class taskEndpointHandler{
         s.flush();
         tx.commit();
         s.close();
-        return Response.status(200).build();
+        return Response.status(201).build();
     }
 
     @Path("new")
