@@ -22,6 +22,7 @@ public class MemberEntity {
         this.memberid = memberid;
     }
 
+    @FormField
     private String email;
 
     @Basic
@@ -46,6 +47,7 @@ public class MemberEntity {
         this.title = title;
     }
 
+    @FormField
     private String firstname;
 
     @Basic
@@ -58,6 +60,7 @@ public class MemberEntity {
         this.firstname = firstname;
     }
 
+    @FormField
     private String lastname;
 
     @Basic
@@ -106,6 +109,7 @@ public class MemberEntity {
         this.phone = phone;
     }
 
+    @FormField
     private String username;
 
     @Basic
@@ -118,6 +122,7 @@ public class MemberEntity {
         this.username = username;
     }
 
+    @FormField
     private String password;
 
     @Basic
