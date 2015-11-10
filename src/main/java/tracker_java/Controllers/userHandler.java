@@ -19,7 +19,7 @@ import java.util.HashMap;
 /**
  * Created by CristianMitroi on 10-11-2015.
  */
-@Path("/user")
+@Path("/users")
 public class userHandler {
 
     @POST
