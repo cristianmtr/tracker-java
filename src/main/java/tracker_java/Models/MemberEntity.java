@@ -35,18 +35,6 @@ public class MemberEntity {
         this.email = email;
     }
 
-    private String title;
-
-    @Basic
-    @javax.persistence.Column(name = "TITLE")
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     @FormField
     private String firstname;
 
@@ -255,18 +243,6 @@ public class MemberEntity {
         this.badaccess = badaccess;
     }
 
-    private Integer level;
-
-    @Basic
-    @javax.persistence.Column(name = "LEVEL")
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
     private String activation;
 
     @Basic
@@ -312,7 +288,6 @@ public class MemberEntity {
 
         if (memberid != null ? !memberid.equals(that.memberid) : that.memberid != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (firstname != null ? !firstname.equals(that.firstname) : that.firstname != null) return false;
         if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null) return false;
         if (city != null ? !city.equals(that.city) : that.city != null) return false;
@@ -334,7 +309,6 @@ public class MemberEntity {
             return false;
         if (visits != null ? !visits.equals(that.visits) : that.visits != null) return false;
         if (badaccess != null ? !badaccess.equals(that.badaccess) : that.badaccess != null) return false;
-        if (level != null ? !level.equals(that.level) : that.level != null) return false;
         if (activation != null ? !activation.equals(that.activation) : that.activation != null) return false;
         if (authorid != null ? !authorid.equals(that.authorid) : that.authorid != null) return false;
         if (enabled != null ? !enabled.equals(that.enabled) : that.enabled != null) return false;
@@ -346,7 +320,6 @@ public class MemberEntity {
     public int hashCode() {
         int result = memberid != null ? memberid.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
         result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
@@ -364,7 +337,6 @@ public class MemberEntity {
         result = 31 * result + (lastchangedate != null ? lastchangedate.hashCode() : 0);
         result = 31 * result + (visits != null ? visits.hashCode() : 0);
         result = 31 * result + (badaccess != null ? badaccess.hashCode() : 0);
-        result = 31 * result + (level != null ? level.hashCode() : 0);
         result = 31 * result + (activation != null ? activation.hashCode() : 0);
         result = 31 * result + (authorid != null ? authorid.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
