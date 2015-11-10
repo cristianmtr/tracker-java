@@ -1,6 +1,10 @@
 package tracker_java.Controllers;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.mindrot.jbcrypt.BCrypt;
 import tracker_java.Models.FormGenerator;
+import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.MemberEntity;
 
 import javax.ws.rs.*;
@@ -18,8 +22,18 @@ public class userHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postNewUser(MemberEntity newUser){
-
-        return Response.status(201).build();
+        String hashedPassword = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
+        System.out.println(hashedPassword);
+        newUser.setPassword(hashedPassword);
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = s.beginTransaction();
+        Integer newCommentId = (Integer)s.save(newUser);
+        s.flush();
+        tx.commit();
+        s.close();
+        HashMap res = new HashMap();
+        res.put("id", newCommentId);
+        return Response.status(201).entity(res).build();
     }
 
     @GET

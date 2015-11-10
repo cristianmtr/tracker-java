@@ -123,18 +123,6 @@ public class MemberEntity {
         this.password = password;
     }
 
-    private String salt;
-
-    @Basic
-    @javax.persistence.Column(name = "SALT")
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     private Integer autologin;
 
     @Basic
@@ -295,7 +283,6 @@ public class MemberEntity {
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (salt != null ? !salt.equals(that.salt) : that.salt != null) return false;
         if (autologin != null ? !autologin.equals(that.autologin) : that.autologin != null) return false;
         if (timezone != null ? !timezone.equals(that.timezone) : that.timezone != null) return false;
         if (expirationdate != null ? !expirationdate.equals(that.expirationdate) : that.expirationdate != null)
@@ -327,7 +314,6 @@ public class MemberEntity {
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (autologin != null ? autologin.hashCode() : 0);
         result = 31 * result + (timezone != null ? timezone.hashCode() : 0);
         result = 31 * result + (expirationdate != null ? expirationdate.hashCode() : 0);
