@@ -6,8 +6,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import tracker_java.Models.FormGenerator;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.MemberEntity;
+import tracker_java.Utilities.AuthenticationHandler;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -34,6 +37,27 @@ public class userHandler {
         HashMap res = new HashMap();
         res.put("id", newCommentId);
         return Response.status(201).entity(res).build();
+    }
+
+    @Path("token")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getToken(@Context HttpHeaders headers) {
+        String[] userNamePassword = AuthenticationHandler.INSTANCE.decode(headers.getRequestHeader("authorization").get(0));
+
+        if (userNamePassword != null) {
+            if (AuthenticationHandler.INSTANCE.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
+                // TODO generate token somehow
+                String theToken = "sadsadas";
+                // save token in redis
+                AuthenticationHandler.saveToken(theToken, userNamePassword[0]);
+                HashMap res = new HashMap();
+                res.put("token", theToken);
+                return Response.ok(res).build();
+            }
+        }
+
+        return Response.status(401).build();
     }
 
     @GET
