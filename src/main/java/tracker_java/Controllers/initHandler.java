@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * Created by cristian on 10/4/15.
  */
-@Path("json")
-public class jsonHandler {
+@Path("init")
+public class initHandler {
 
     private List getAllTasks() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -72,7 +72,7 @@ public class jsonHandler {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle() {
-        System.out.println("request at /json");
+        System.out.println("request at /init");
 
         List tasks = this.getAllTasks();
         HashMap dataSources = this.getDataSources();
