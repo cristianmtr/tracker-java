@@ -61,7 +61,7 @@ public class userHandler {
     }
 
     @GET
-    @Path("spec")
+    @Path("specification")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserForm() {
