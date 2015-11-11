@@ -1,33 +1,44 @@
-POST /task - new task with auto ID generation
-POST /task/<id> - update task with ID <id> with new info
-POST /task/<id>/comment - post comment to task with id
-POST /task/<id>/history - post status change to task with id
+# ITEMS
 
-FORMAT:
-{
-"code":<code>,
-"data": {}
-}
+/tasks
 
-NOTES:
-- "data" will contain either one item, or a list of items, depending on endpoint;
-- when the endpoint should only return ONE item, a 500 error will be returned instead;
-- datetime fields will have the format: "Wed, 01 Oct 2014 09:36:21 GMT";
+@POST
+new task with auto ID generation
 
-Authentication
+/<id>
+@POST
+update task with ID <id> with new info
 
-/user/
+Subresources
 
-/new
-reply with form
-contains required fields, including password
+/<id>/comment
+@POST
+post comment to task with id
+
+/task/<id>/history
+POST
+post status change to task with id
+
+### TODO /specification
+
+# USERS
+
+/users
+
+@POST
 do validation
 hash password with salt
 ???
 store
 return ok or not
 
-/login
+/specification
+reply with form
+contains required fields, including password
+specify types
+### TODO specify mandatory
+
+/token
 send username password in HTTP Authorization field
 generate token
 ```
@@ -37,5 +48,6 @@ random.nextBytes(bytes);
 String token = bytes.toString();
 ```
 all subsequent requests would include the token in HTTP Authorization field
+
 
 
