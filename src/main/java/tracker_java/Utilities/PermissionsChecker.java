@@ -1,6 +1,8 @@
 package tracker_java.Utilities;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.glassfish.jersey.server.ContainerRequest;
@@ -18,8 +20,8 @@ import java.util.regex.Pattern;
 @Aspect
 public class PermissionsChecker {
 
-    @Before("execution(* *.*(..)) && @annotation(PermissionRequirements) ")
-    public Response checkPermissionsIntercept(JoinPoint joinPoint) throws Exception {
+    @Around("execution(* *.*(..)) && @annotation(PermissionRequirements) ")
+    public Response checkPermissionsIntercept(ProceedingJoinPoint joinPoint) throws Exception {
 
         System.out.println("checking permissions");
         ContainerRequest request = (ContainerRequest) joinPoint.getArgs()[0];
