@@ -43,9 +43,9 @@ public final class PermissionsChecker {
     private boolean userOfTokenHasPermission(ContainerRequest request) {
         String token = getToken(request);
         Integer memberId = getUserIdFromToken(token);
-        String path = request.getPath(true);
+        String[] path = request.getPath(true).split(Pattern.quote("/"));
         System.out.format("request at %s from userId %s%n", path, memberId);
-
+        
         return false;
     }
 
@@ -75,10 +75,5 @@ public final class PermissionsChecker {
         // otherwise Bad Request
         throw new WebApplicationException(Response.status(400).build());
     }
-
-    private String decodeToken(ContainerRequest request) {
-        return null;
-    }
-
 }
 
