@@ -1,5 +1,6 @@
 package tracker_java.Utilities;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -12,6 +13,12 @@ public class ExceptionManager implements ExceptionMapper<Throwable> {
     @Override
     public Response toResponse(Throwable e) {
         e.printStackTrace();
+        
+        if ( e instanceof WebApplicationException ){
+            WebApplicationException theException = (WebApplicationException)e;
+            return theException.getResponse();
+        }
+        
         return Response.serverError()
                 .entity(e.getMessage())
                 .build();
