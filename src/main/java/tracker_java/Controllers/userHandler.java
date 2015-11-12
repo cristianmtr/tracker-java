@@ -45,17 +45,31 @@ public class userHandler {
     @Produces(MediaType.APPLICATION_JSON)
     @PermissionRequirements
     public Response getToken(@Context HttpHeaders headers) {
-        String[] userNamePassword = AuthenticationHandler.INSTANCE.decode(headers.getRequestHeader("authorization").get(0));
+        // userNamePassword = [$username, $password]
+        String[] userNamePassword = AuthenticationHandler.decode(headers.getRequestHeader("authorization").get(0));
 
         if (userNamePassword != null) {
-            if (AuthenticationHandler.INSTANCE.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
-                // TODO generate token somehow
-                String theToken = "sadsadas";
-                // save token in redis
-                AuthenticationHandler.saveToken(theToken, userNamePassword[0]);
-                HashMap res = new HashMap();
-                res.put("token", theToken);
-                return Response.ok(res).build();
+            try {
+                if (AuthenticationHandler.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
+                    // TODO generate token somehow
+                    String theToken = "sadsadas";
+                    // save token in redis
+                    // token -> userId
+                    Integer userId;
+                    try {
+                        userId = AuthenticationHandler.getUserIdFromUsername(userNamePassword[0]);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new WebApplicationException(Response.status(400).build());
+                    }
+                    AuthenticationHandler.saveToken(theToken, userId);
+                    HashMap res = new HashMap();
+                    res.put("token", theToken);
+                    return Response.ok(res).build();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new WebApplicationException(Response.status(400).build());
             }
         }
 
