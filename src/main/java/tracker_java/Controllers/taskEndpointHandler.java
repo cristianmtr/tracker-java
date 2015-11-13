@@ -1,6 +1,5 @@
 package tracker_java.Controllers;
 
-import com.sun.net.httpserver.HttpExchange;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -24,7 +23,7 @@ import java.util.List;
  * if /task/<id>/history
  * return json of history
  */
-@Path("task")
+@Path("tasks")
 public class taskEndpointHandler{
 
     @POST
