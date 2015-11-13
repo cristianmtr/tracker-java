@@ -1,6 +1,7 @@
 package tracker_java.Models;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Predicate;
 import java.sql.Timestamp;
 
 /**
@@ -267,6 +268,17 @@ public class MemberEntity {
         this.enabled = enabled;
     }
 
+    public boolean admin;
+
+    @Basic
+    @javax.persistence.Column(name = "admin")
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
