@@ -1,6 +1,9 @@
 package tracker_java.Models;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
@@ -18,6 +21,24 @@ public class HibernateUtil {
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static Object getOneItemFromQuery(String query){
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = s.beginTransaction();
+        Query q = s.createQuery(query);
+        Object response = q.list().get(0);
+        s.flush();
+        tx.commit();
+        s.close();
+        try {
+            return response;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
         }
     }
 
