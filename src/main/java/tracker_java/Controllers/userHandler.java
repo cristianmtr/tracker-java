@@ -7,7 +7,6 @@ import tracker_java.Models.FormGenerator;
 import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.MemberEntity;
 import tracker_java.Utilities.AuthenticationHandler;
-import tracker_java.Utilities.PermissionRequirements;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -25,7 +24,6 @@ public class userHandler {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @PermissionRequirements
     public Response postNewUser(MemberEntity newUser){
         String hashedPassword = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
         System.out.println(hashedPassword);
