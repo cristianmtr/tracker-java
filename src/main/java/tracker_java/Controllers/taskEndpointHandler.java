@@ -1,5 +1,6 @@
 package tracker_java.Controllers;
 
+import org.glassfish.jersey.server.ContainerRequest;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -7,8 +8,10 @@ import tracker_java.Models.HibernateUtil;
 import tracker_java.Models.ItemEntity;
 import tracker_java.Models.ItemcommentEntity;
 import tracker_java.Models.ItemstatusEntity;
+import tracker_java.Utilities.PermissionRequirements;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -30,7 +33,8 @@ public class taskEndpointHandler{
     @Path("{id}/comments/new")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostNewComment(@PathParam("id") int taskId, ItemcommentEntity newComment) {
+    @PermissionRequirements
+    public Response handlePostNewComment(final ItemcommentEntity newComment, @Context ContainerRequest request, @PathParam("id") int taskId) {
         newComment.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -48,7 +52,8 @@ public class taskEndpointHandler{
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response handlePostHistory(@PathParam("id") int taskId, ItemstatusEntity newStatus) {
+    @PermissionRequirements
+    public Response handlePostHistory(@PathParam("id") int taskId, ItemstatusEntity newStatus, @Context ContainerRequest request) {
         newStatus.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -65,7 +70,8 @@ public class taskEndpointHandler{
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleUpdateTask(@PathParam("id") int taskId, ItemEntity newTask) {
+    @PermissionRequirements
+    public Response handleUpdateTask(@PathParam("id") int taskId, ItemEntity newTask, @Context ContainerRequest request) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         newTask.setId(taskId);
@@ -80,7 +86,8 @@ public class taskEndpointHandler{
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostNewTask(ItemEntity jsonObject) {
+    @PermissionRequirements
+    public Response handlePostNewTask(ItemEntity jsonObject, @Context ContainerRequest request) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         Integer newId = (Integer)s.save(jsonObject);
@@ -95,7 +102,8 @@ public class taskEndpointHandler{
     @Path("{id}/comments")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleGetComments(@PathParam("id") int taskId) {
+    @PermissionRequirements
+    public Response handleGetComments(@Context ContainerRequest request,@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         Query q = s.createQuery("from ItemcommentEntity where itemid = :taskId").setParameter("taskId", taskId);
@@ -108,7 +116,8 @@ public class taskEndpointHandler{
     @Path("{id}/history")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleGetHistory(@PathParam("id") int taskId) {
+    @PermissionRequirements
+    public Response handleGetHistory(@Context ContainerRequest request,@PathParam("id") int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
         Query q = s.createQuery("from ItemstatusEntity  where itemid = :taskId").setParameter("taskId", taskId);
@@ -120,7 +129,8 @@ public class taskEndpointHandler{
     @Path("{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleGetTask(@PathParam("id") int taskId) {
+    @PermissionRequirements
+    public Response handleGetTask(@Context ContainerRequest request,@PathParam("id")int taskId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
         Query theOneq = s.createQuery("from ItemEntity where id = :taskId").setParameter("taskId", taskId);

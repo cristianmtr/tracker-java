@@ -25,6 +25,7 @@ public class userHandler {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @PermissionRequirements
     public Response postNewUser(MemberEntity newUser){
         String hashedPassword = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
         System.out.println(hashedPassword);
@@ -43,7 +44,6 @@ public class userHandler {
     @Path("token")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @PermissionRequirements
     public Response getToken(@Context HttpHeaders headers) {
         // userNamePassword = [$username, $password]
         String[] userNamePassword = AuthenticationHandler.decode(headers.getRequestHeader("authorization").get(0));
@@ -52,7 +52,7 @@ public class userHandler {
             try {
                 if (AuthenticationHandler.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
                     // TODO generate token somehow
-                    String theToken = "sadsadas";
+                    String theToken = "token";
                     // save token in redis
                     // token -> userId
                     Integer userId;

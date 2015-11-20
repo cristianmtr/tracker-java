@@ -1,24 +1,21 @@
 package tracker_java.Utilities;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import redis.clients.jedis.Jedis;
-import tracker_java.Controllers.taskEndpointHandler;
 import tracker_java.Models.HibernateUtil;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import java.util.IllegalFormatException;
-import java.util.List;
 import java.util.regex.Pattern;
+
+import static tracker_java.Models.HibernateUtil.getOneItemFromQuery;
 
 /**
  * Created by cristian on 11/11/15.
@@ -28,9 +25,26 @@ import java.util.regex.Pattern;
 public final class PermissionsChecker {
 
     @Around("@annotation(PermissionRequirements) ")
-    public Object checkPermissionsIntercept(ProceedingJoinPoint joinPoint) throws Exception {
+    public Object checkPermissionsIntercept(ProceedingJoinPoint joinPoint) {
+        return start(joinPoint);
+    }
+
+    private Object start(ProceedingJoinPoint joinPoint) {
         System.out.println("checking permissions");
+//        Object[] args = joinPoint.getArgs();
         ContainerRequest request = (ContainerRequest) joinPoint.getArgs()[0];
+//        for (Object o: args) {
+//            try {
+//                request = (ContainerRequest) o;
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            if (!request.equals(null)) {
+//                break;
+//            }
+//        }
+
         /*
          token exist check
          get user of token
@@ -52,16 +66,16 @@ public final class PermissionsChecker {
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
-        };
+        }
         return Response.status(401).build();
     }
 
     private boolean userOfTokenHasPermission(ContainerRequest request) {
+        String[] path = request.getPath(true).split(Pattern.quote("/"));
         String token = getToken(request);
         Integer memberId = getUserIdFromToken(token);
-        String[] path = request.getPath(true).split(Pattern.quote("/"));
         String method = request.getMethod();
-        System.out.format("request at %s : %s from userId %s%n", method, path, memberId);
+        System.out.format("request at %s : %s from userId %s%n", method, path.toString(), memberId);
         return checkUserPermissionAtPathAndMethod(memberId, path, method);
     }
 
@@ -69,11 +83,7 @@ public final class PermissionsChecker {
         if (userIsAdmin(memberId)) {
             return true;
         }
-        if ( path[0].equals("tasks") )
-        {
-            return handleProjectRights(path, memberId, method);
-        }
-        return false;
+        return path[0].equals("tasks") && handleProjectRights(path, memberId, method);
     }
 
     private boolean handleProjectRights(String[] path, Integer memberId, String method) {
@@ -85,7 +95,21 @@ public final class PermissionsChecker {
             POST & path like ['tasks', <int>, "comments"] - rights >= 2
                 else rights >= 3
          */
-        return false;
+        try {
+            Integer taskId = Integer.parseInt(path[1]);
+            Integer projectId = (Integer) getOneItemFromQuery(String.format("select projectid from ItemEntity where id = '%s'", taskId));
+            Integer permissions = (Integer) getOneItemFromQuery(String.format("select position from MemberprojectEntity where projectid = '%s' and memberid = '%s'", projectId));
+            if (method.toLowerCase().equals("get")) {
+                return permissions >= 1;
+            } else if (method.toLowerCase().equals("post") && path[path.length - 1].toLowerCase().equals("comments")) {
+                return permissions >= 2;
+            } else {
+                return permissions == 3;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private boolean userIsAdmin(Integer memberId) {
@@ -95,9 +119,7 @@ public final class PermissionsChecker {
         boolean isAdmin = false;
         try {
             isAdmin = (boolean) isAdminQuery.list().get(0);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         s.flush();
@@ -110,8 +132,7 @@ public final class PermissionsChecker {
         try {
             Jedis redis = JedisPoolInstance.pool.getResource();
             return Integer.parseInt(redis.get(token));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -125,8 +146,7 @@ public final class PermissionsChecker {
             if (typeAndToken[0].equals("Bearer") && typeAndToken[1].length() > 0) {
                 return typeAndToken[1];
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // otherwise Bad Request

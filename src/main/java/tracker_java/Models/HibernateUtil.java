@@ -1,5 +1,6 @@
 package tracker_java.Models;
 
+import org.aopalliance.reflect.Class;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

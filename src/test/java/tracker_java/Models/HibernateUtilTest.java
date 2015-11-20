@@ -8,7 +8,8 @@ import junit.framework.TestCase;
 public class HibernateUtilTest extends TestCase {
 
     public void testGetOneItemFromQuery() throws Exception {
-        Object memberId = HibernateUtil.getOneItemFromQuery("select memberid from MemberEntity where username = 'cristian'");
+        String username = "cristian";
+        Object memberId = HibernateUtil.getOneItemFromQuery(String.format("select memberid from MemberEntity where username = '%s'",username));
         assertEquals(memberId, 3);
     }
 }
