@@ -1,8 +1,8 @@
 package tracker_java.Utilities;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -11,7 +11,6 @@ import redis.clients.jedis.Jedis;
 import tracker_java.Models.HibernateUtil;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.util.regex.Pattern;
 
@@ -24,27 +23,14 @@ import static tracker_java.Models.HibernateUtil.getOneItemFromQuery;
 @Aspect
 public final class PermissionsChecker {
 
-    @Around("@annotation(PermissionRequirements) ")
-    public Object checkPermissionsIntercept(ProceedingJoinPoint joinPoint) {
-        return start(joinPoint);
+    @Before("@annotation(PermissionRequirements) ")
+    public void checkPermissionsIntercept(JoinPoint joinPoint) {
+        start(joinPoint);
     }
 
-    private Object start(ProceedingJoinPoint joinPoint) {
+    private void start(JoinPoint joinPoint) {
         System.out.println("checking permissions");
-//        Object[] args = joinPoint.getArgs();
         ContainerRequest request = (ContainerRequest) joinPoint.getArgs()[0];
-//        for (Object o: args) {
-//            try {
-//                request = (ContainerRequest) o;
-//            }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            if (!request.equals(null)) {
-//                break;
-//            }
-//        }
-
         /*
          token exist check
          get user of token
@@ -62,12 +48,12 @@ public final class PermissionsChecker {
 
         if (this.userOfTokenHasPermission(request)) {
             try {
-                return joinPoint.proceed();
+                return;
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
         }
-        return Response.status(401).build();
+        throw new WebApplicationException(Response.status(401).build());
     }
 
     private boolean userOfTokenHasPermission(ContainerRequest request) {
@@ -98,7 +84,7 @@ public final class PermissionsChecker {
         try {
             Integer taskId = Integer.parseInt(path[1]);
             Integer projectId = (Integer) getOneItemFromQuery(String.format("select projectid from ItemEntity where id = '%s'", taskId));
-            Integer permissions = (Integer) getOneItemFromQuery(String.format("select position from MemberprojectEntity where projectid = '%s' and memberid = '%s'", projectId));
+            Integer permissions = (Integer) getOneItemFromQuery(String.format("select position from MemberprojectEntity where projectid = '%s' and memberid = '%s'", projectId, memberId));
             if (method.toLowerCase().equals("get")) {
                 return permissions >= 1;
             } else if (method.toLowerCase().equals("post") && path[path.length - 1].toLowerCase().equals("comments")) {
