@@ -69,7 +69,15 @@ public final class PermissionsChecker {
         if (userIsAdmin(memberId)) {
             return true;
         }
-        return path[0].equals("tasks") && handleProjectRights(path, memberId, method);
+        if (path[0].equals("tasks"))
+            return handleProjectRights(path, memberId, method);
+        else if (path[0].equals("users")) {
+            //TODO
+            return false;
+        }
+        else {
+            return false;
+        }
     }
 
     private boolean handleProjectRights(String[] path, Integer memberId, String method) {
