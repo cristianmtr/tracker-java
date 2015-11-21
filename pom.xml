@@ -429,7 +429,6 @@
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
-        <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <outputDirectory>target/classes</outputDirectory>
         <testOutputDirectory>target/test-classes</testOutputDirectory>
@@ -478,7 +477,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilationLevel>1.8</compilationLevel>
                     <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>
@@ -653,12 +651,6 @@
                         </goals>
                         <configuration>
                             <outputDirectory>target/site</outputDirectory>
-                            <reportPlugins>
-                                <reportPlugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                                </reportPlugin>
-                            </reportPlugins>
                         </configuration>
                     </execution>
                 </executions>
