@@ -28,7 +28,7 @@ import java.util.List;
 public class taskEndpointHandler{
 
     @POST
-    @Path("{id}/comments/new")
+    @Path("{id}/comments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlePostNewComment(final ItemcommentEntity newComment, @HeaderParam("Authorization") String authorization, @PathParam("id") int taskId) {
@@ -47,7 +47,7 @@ public class taskEndpointHandler{
         return Response.status(201).entity(res).build();
     }
 
-    @Path("{id}/history/new")
+    @Path("{id}/history")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -85,7 +85,6 @@ public class taskEndpointHandler{
         return Response.status(201).build();
     }
 
-    @Path("new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
