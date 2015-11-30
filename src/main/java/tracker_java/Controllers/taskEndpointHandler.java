@@ -32,7 +32,7 @@ public class taskEndpointHandler{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlePostNewComment(final ItemcommentEntity newComment, @HeaderParam("Authorization") String authorization, @PathParam("id") int taskId) {
-        if (!PermissionsChecker.checkPermissionComment(newComment.getItemid(), authorization)) {
+        if (!PermissionsChecker.checkPermissionComment(taskId, authorization)) {
             return Response.status(401).build();
         }
         newComment.setItemid(taskId);

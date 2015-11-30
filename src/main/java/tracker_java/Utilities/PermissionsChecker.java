@@ -66,7 +66,7 @@ public final class PermissionsChecker {
      */
     public static boolean checkPermissionComment(Integer itemid, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
-        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE itemid = '%s'",itemid));
+        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",itemid));
         Integer permission = (Integer) getOneItemFromQuery(String.format("SELECT position FROM MemberprojectEntity WHERE memberid = '%s' AND projectid = '%s'", userid, projectId));
         return permission >= 2;
     }
