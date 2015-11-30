@@ -72,7 +72,12 @@ public class taskEndpointHandler{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleUpdateTask(@PathParam("id") int taskId, ItemEntity newTask, @HeaderParam("Authorization") String authorization) {
+        // check if user can MOVE task from existing project
         if (!PermissionsChecker.checkPermissionWrite(taskId, authorization)) {
+            return Response.status(401).build();
+        }
+        // check if user has WRITE access to destination project
+        if (!PermissionsChecker.checkWritePermissionToProject(newTask.getProjectid(), authorization)) {
             return Response.status(401).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
@@ -89,7 +94,9 @@ public class taskEndpointHandler{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlePostNewTask(ItemEntity jsonObject, @HeaderParam("Authorization") String authorization) {
-        if (!PermissionsChecker.checkPermissionWrite(jsonObject.getProjectid(), authorization)) {
+        // when posting new task, check if the user has access to write the task
+        // to the project
+        if (!PermissionsChecker.checkWritePermissionToProject(jsonObject.getProjectid(), authorization)) {
             return Response.status(401).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();

@@ -96,5 +96,11 @@ public final class PermissionsChecker {
         Integer permission = (Integer) getOneItemFromQuery(String.format("SELECT position FROM MemberprojectEntity WHERE memberid = '%s' AND projectid = '%s'", userid, projectId));
         return permission >= 1;
     }
+
+    public static boolean checkWritePermissionToProject(Integer projectid, String authorization) {
+        Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
+        Integer permission = (Integer) getOneItemFromQuery(String.format("SELECT position FROM MemberprojectEntity WHERE memberid = '%s' AND projectid = '%s'", userid, projectid));
+        return permission >= 3;
+    }
 }
 
