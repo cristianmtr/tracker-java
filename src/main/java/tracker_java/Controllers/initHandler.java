@@ -38,7 +38,7 @@ public class initHandler {
 
         HashMap members = new HashMap();
         for (MemberEntity member : (List<MemberEntity>) membersList) {
-            members.put(member.getMemberid(), member.getFirstname());
+            members.put(member.getMemberid(), member.getUsername());
         }
 
         session = HibernateUtil.getSessionFactory().openSession();
