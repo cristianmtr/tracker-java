@@ -53,7 +53,7 @@ public final class PermissionsChecker {
         }
         catch (Exception e) {
             e.printStackTrace();
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
         return null;
     }
