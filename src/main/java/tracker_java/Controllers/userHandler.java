@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by CristianMitroi on 10-11-2015.
@@ -50,7 +51,9 @@ public class userHandler {
             try {
                 if (AuthenticationHandler.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
                     // TODO generate token somehow
-                    String theToken = "token";
+                    String key = UUID.randomUUID().toString().toUpperCase() +
+                            "|" + userNamePassword[0];
+                    String theToken = BCrypt.hashpw(key, BCrypt.gensalt());
                     // save token in redis
                     // token -> userId
                     Integer userId;
