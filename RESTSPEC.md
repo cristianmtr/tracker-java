@@ -1,53 +1,60 @@
 # ITEMS
 
-/tasks
+## /tasks
 
-@POST
+__POST__
 new task with auto ID generation
 
-/<id>
-@POST
+## /{id}
+**POST**
 update task with ID <id> with new info
 
-Subresources
-
-/<id>/comment
-@POST
+## /{id}/comment
+**POST**
 post comment to task with id
 
-/task/<id>/history
-POST
+## /task/{id}/history
+**POST**
 post status change to task with id
 
-### TODO /specification
+_TODO_
+/specification
 
 # USERS
 
-/users
+## /users
+	curl -i -X POST -H "Content-type: application/json" --data @user.json localhost:8000/users
 
-@POST
+	{
+	"firstname" : "cristianx",
+	"password" : "cristian",
+	"email" : "cristian@example.com",
+	"lastname" : "m",
+	"username" : "cristianx"
+	}
+	
+**POST**
 do validation
 hash password with salt
 ???
 store
 return ok or not
 
-/specification
+## /specification
+	curl -i localhost:8000/users/specification
+
 reply with form
 contains required fields, including password
-specify types
-### TODO specify mandatory
+specifies types
 
-/token
-send username password in HTTP Authorization field
-generate token
-```
-SecureRandom random = new SecureRandom();
-byte bytes[] = new byte[20];
-random.nextBytes(bytes);
-String token = bytes.toString();
-```
-all subsequent requests would include the token in HTTP Authorization field
+_TODO_
+check fields for not null and type matching
 
+## /token
+	curl -i -H "Authorization: Basic Y3Jpc3RpYW46Y3Jpc3RpYW4=" localhost:8000/users/token
 
+send username password in HTTP Authorization field base64 encoded;
+generate token;
+all subsequent requests would include the token in HTTP Authorization field - e.g.:
 
+	curl -i -H "Authorization: Bearer $token" localhost:8000/tasks/2
