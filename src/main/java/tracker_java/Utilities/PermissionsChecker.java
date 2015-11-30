@@ -58,6 +58,10 @@ public final class PermissionsChecker {
         return null;
     }
 
+    public static int getUserIdFromAuthorization(String authorization){
+        return getUserIdFromToken(getTokenFromHeader(authorization));
+    }
+
     /*
     get userid from token
     get projectid from itemid

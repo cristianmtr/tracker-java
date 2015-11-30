@@ -58,6 +58,8 @@ public class taskEndpointHandler{
         newStatus.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
+        Integer userId = PermissionsChecker.getUserIdFromAuthorization(authorization);
+        newStatus.setMemberid(userId);
         Long newId = (Long) s.save(newStatus);
         s.flush();
         tx.commit();

@@ -1,4 +1,1 @@
-- test post-ing comments
-- test post-ing history
-- in diff. combinations of permissions level
 - /users/permissions - show permissions of user based on token
