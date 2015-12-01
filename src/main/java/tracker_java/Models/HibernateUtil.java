@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
+
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
@@ -25,11 +27,11 @@ public class HibernateUtil {
         }
     }
 
-    public static Object getOneItemFromQuery(String query){
+    public static List getListFromQuery(String query){
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         Query q = s.createQuery(query);
-        Object response = q.list().get(0);
+        List response = q.list();
         s.flush();
         tx.commit();
         s.close();
@@ -41,6 +43,10 @@ public class HibernateUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Object getOneItemFromQuery(String query){
+        return getListFromQuery(query).get(0);
     }
 
     public static SessionFactory getSessionFactory() {
