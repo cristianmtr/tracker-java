@@ -8,7 +8,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import redis.clients.jedis.Jedis;
 import tracker_java.Models.HibernateUtil;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
+import java.util.UUID;
 
 /**
  * Created by cristian on 11/10/15.
@@ -51,21 +54,29 @@ public final class AuthenticationHandler {
     }
 
     /*
-    stores the token as a key, with userid as value;
-    stores the userid as a key, with token as value;
-    check and delete if a userid was already assoc. with a previous token;
+    check if the userid already has a token
+    if so, return that to the user
+    else
+    store newly generated token and return that
      */
-    public static void saveToken(String theToken, Integer userid) {
+    public static String saveToken(Integer userid) {
         try {
+
             Jedis redis = JedisPoolInstance.pool.getResource();
-            redis.set(theToken, userid.toString());
-            if (redis.get(userid.toString())!=null) {
-                redis.del(redis.get(userid.toString()));
+            String existingToken = redis.get(userid.toString());
+            if (existingToken!=null) {
+                return existingToken;
             }
-            redis.set(userid.toString(), theToken);
+            else {
+                String theToken = UUID.randomUUID().toString().toUpperCase();
+                redis.set(userid.toString(), theToken);
+                redis.set(theToken, userid.toString());
+                return theToken;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        throw new WebApplicationException(Response.status(500).build());
     }
 
     public static Integer getUserIdFromUsername(String username) throws Exception {
