@@ -50,12 +50,19 @@ public final class AuthenticationHandler {
         }
     }
 
-    public static void saveToken(String theToken, Integer userName) {
+    /*
+    stores the token as a key, with userid as value;
+    stores the userid as a key, with token as value;
+    check and delete if a userid was already assoc. with a previous token;
+     */
+    public static void saveToken(String theToken, Integer userid) {
         try {
             Jedis redis = JedisPoolInstance.pool.getResource();
-            redis.set(theToken, userName.toString());
-            // expire after 1 week
-            redis.expire(theToken, 604800);
+            redis.set(theToken, userid.toString());
+            if (redis.get(userid.toString())!=null) {
+                redis.del(redis.get(userid.toString()));
+            }
+            redis.set(userid.toString(), theToken);
         } catch (Exception e) {
             e.printStackTrace();
         }
