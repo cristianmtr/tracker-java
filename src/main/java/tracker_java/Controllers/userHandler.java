@@ -50,7 +50,6 @@ public class userHandler {
         if (userNamePassword != null) {
             try {
                 if (AuthenticationHandler.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
-                    String theToken = UUID.randomUUID().toString().toUpperCase();
                     // save token in redis
                     // token -> userId
                     Integer userId;
@@ -60,7 +59,7 @@ public class userHandler {
                         e.printStackTrace();
                         throw new WebApplicationException(Response.status(400).build());
                     }
-                    AuthenticationHandler.saveToken(theToken, userId);
+                    String theToken = AuthenticationHandler.saveToken(userId);
                     HashMap res = new HashMap();
                     res.put("token", theToken);
                     return Response.ok(res).build();
