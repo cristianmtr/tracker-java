@@ -1,18 +1,23 @@
 package tracker_java.Controllers;
 
-import com.sun.net.httpserver.HttpExchange;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import tracker_java.Models.HibernateUtil;
-import tracker_java.Models.MemberEntity;
-import tracker_java.Models.ProjectEntity;
+import org.hibernate.Transaction;
+import org.hibernate.type.IntegerType;
+import tracker_java.Models.*;
+import tracker_java.Utilities.PermissionsChecker;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static tracker_java.Models.HibernateUtil.getListFromQuery;
 
 /**
  * Created by cristian on 10/4/15.
@@ -20,12 +25,17 @@ import java.util.List;
 @Path("init")
 public class initHandler {
 
-    private List getAllTasks() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        List tasks = session.createQuery("from ItemEntity ").list();
-        session.close();
+    private List getAllTasks(Integer userId) {
+        List<ItemEntity> tasks = new ArrayList<ItemEntity>();
+        List response = HibernateUtil.getListFromQuery(String.format("from MemberprojectEntity where memberid=%s", userId));
+        for (MemberprojectEntity mem : (List<MemberprojectEntity>) response) {
+            if (mem.getPosition() >= 1) {
+                List<ItemEntity> newTasks = HibernateUtil.getListFromQuery(String.format("from ItemEntity where projectid=%s", mem.getProjectid()));
+                tasks.addAll(newTasks);
+            }
+        }
         return tasks;
+
     }
 
     private HashMap getDataSources(){
@@ -71,10 +81,12 @@ public class initHandler {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle() {
+    public Response handle(@HeaderParam("Authorization") String authorization) {
         System.out.println("request at /init");
 
-        List tasks = this.getAllTasks();
+        Integer userId = PermissionsChecker.getUserIdFromAuthorization(authorization);
+
+        List tasks = this.getAllTasks(userId);
         HashMap dataSources = this.getDataSources();
 
         HashMap result = new HashMap();
