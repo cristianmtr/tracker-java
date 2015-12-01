@@ -1,1 +1,2 @@
+- /init return tasks with read access and above;
 - /users/permissions - show permissions of user based on token
