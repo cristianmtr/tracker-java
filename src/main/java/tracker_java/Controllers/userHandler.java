@@ -50,7 +50,6 @@ public class userHandler {
         if (userNamePassword != null) {
             try {
                 if (AuthenticationHandler.checkUserNamePassword(userNamePassword[0], userNamePassword[1])) {
-                    // TODO generate token somehow
                     String key = UUID.randomUUID().toString().toUpperCase() +
                             "|" + userNamePassword[0];
                     String theToken = BCrypt.hashpw(key, BCrypt.gensalt());
