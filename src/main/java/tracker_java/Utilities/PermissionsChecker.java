@@ -35,16 +35,17 @@ public final class PermissionsChecker {
     }
 
     private static Integer getUserIdFromToken(String token) {
+        Integer userid = null;
         try {
             Jedis redis = JedisPoolInstance.pool.getResource();
-            Integer userid = Integer.parseInt(redis.get(token));
+            userid = Integer.parseInt(redis.get(token));
             if (userid==null) {
                 throw new WebApplicationException(Response.Status.UNAUTHORIZED);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return userid;
     }
 
     private static String getTokenFromHeader(String bareHeader) {
