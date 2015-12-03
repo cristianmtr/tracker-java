@@ -38,6 +38,8 @@ public class taskEndpointHandler{
         newComment.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
+        Integer userId = PermissionsChecker.getUserIdFromAuthorization(authorization);
+        newComment.setMemberid(userId);
         Integer newCommentId = (Integer)s.save(newComment);
         s.flush();
         tx.commit();
@@ -95,15 +97,17 @@ public class taskEndpointHandler{
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostNewTask(ItemEntity jsonObject, @HeaderParam("Authorization") String authorization) {
+    public Response handlePostNewTask(ItemEntity newTask, @HeaderParam("Authorization") String authorization) {
         // when posting new task, check if the user has access to write the task
         // to the project
-        if (!PermissionsChecker.checkWritePermissionToProject(jsonObject.getProjectid(), authorization)) {
+        if (!PermissionsChecker.checkWritePermissionToProject(newTask.getProjectid(), authorization)) {
             return Response.status(401).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
-        Integer newId = (Integer)s.save(jsonObject);
+        Integer userId = PermissionsChecker.getUserIdFromAuthorization(authorization);
+        newTask.setAuthorid(userId);
+        Integer newId = (Integer)s.save(newTask);
         s.flush();
         tx.commit();
         s.close();
