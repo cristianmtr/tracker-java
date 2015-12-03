@@ -39,27 +39,31 @@ public final class PermissionsChecker {
         try {
             Jedis redis = JedisPoolInstance.pool.getResource();
             userid = Integer.parseInt(redis.get(token));
-            if (userid==null) {
-                throw new WebApplicationException(Response.Status.UNAUTHORIZED);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+	if (userid==null) {
+	    throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+	}
         return userid;
     }
 
     private static String getTokenFromHeader(String bareHeader) {
+	String token = null;
         try {
             String[] typeAndToken = bareHeader.split(Pattern.quote(" "));
             if (typeAndToken[0].equals("Bearer") && typeAndToken[1].length() > 0) {
-                return typeAndToken[1];
+                token = typeAndToken[1];
             }
         }
         catch (Exception e) {
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
-        return null;
+	if (token==null) {
+	    throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+	}
+        return token;
     }
 
     public static int getUserIdFromAuthorization(String authorization){
@@ -67,11 +71,11 @@ public final class PermissionsChecker {
     }
 
     /*
-    get userid from token
-    get projectid from itemid
-    get memberproject junction entry
-    >= 2
-     */
+      get userid from token
+      get projectid from itemid
+      get memberproject junction entry
+      >= 2
+    */
     public static boolean checkPermissionComment(Integer itemid, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
         Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",itemid));
@@ -80,11 +84,11 @@ public final class PermissionsChecker {
     }
 
     /*
-    get userid from token
-    get projectid from taskid
-    get memberproject entry
-    == 3
-     */
+      get userid from token
+      get projectid from taskid
+      get memberproject entry
+      == 3
+    */
     public static boolean checkPermissionWrite(int taskId, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
         Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",taskId));
@@ -93,11 +97,11 @@ public final class PermissionsChecker {
     }
 
     /*
-    get userid from token
-    get projectid from taskid
-    get memberproject entry
-    >= 1
-     */
+      get userid from token
+      get projectid from taskid
+      get memberproject entry
+      >= 1
+    */
     public static boolean checkPermissionRead(int taskId, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
         Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",taskId));
