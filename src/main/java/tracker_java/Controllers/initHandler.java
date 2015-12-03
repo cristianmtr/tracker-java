@@ -73,7 +73,7 @@ public class initHandler {
         priorities.put(9, "Whatever");
 
         dataSources.put("priority", priorities);
-        dataSources.put("tasklist", tasklists);
+        dataSources.put("projectlist", tasklists);
         dataSources.put("responsible", members);
 
         return dataSources;
