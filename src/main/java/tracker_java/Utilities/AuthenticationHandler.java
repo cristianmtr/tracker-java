@@ -60,9 +60,7 @@ public final class AuthenticationHandler {
     store newly generated token and return that
      */
     public static String saveToken(Integer userid) {
-        try {
-
-            Jedis redis = JedisPoolInstance.pool.getResource();
+        try (Jedis redis = JedisPoolInstance.pool.getResource()) {
             String existingToken = redis.get(userid.toString());
             if (existingToken!=null) {
                 return existingToken;
@@ -75,8 +73,8 @@ public final class AuthenticationHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new WebApplicationException(Response.status(500).build());
         }
-        throw new WebApplicationException(Response.status(500).build());
     }
 
     public static Integer getUserIdFromUsername(String username) throws Exception {

@@ -36,37 +36,35 @@ public final class PermissionsChecker {
 
     private static Integer getUserIdFromToken(String token) {
         Integer userid = null;
-        try {
-            Jedis redis = JedisPoolInstance.pool.getResource();
+        try (Jedis redis = JedisPoolInstance.pool.getResource()) {
             userid = Integer.parseInt(redis.get(token));
         } catch (Exception e) {
             e.printStackTrace();
         }
-	if (userid==null) {
-	    throw new WebApplicationException(Response.Status.UNAUTHORIZED);
-	}
+        if (userid == null) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
         return userid;
     }
 
     private static String getTokenFromHeader(String bareHeader) {
-	String token = null;
+        String token = null;
         try {
             String[] typeAndToken = bareHeader.split(Pattern.quote(" "));
             if (typeAndToken[0].equals("Bearer") && typeAndToken[1].length() > 0) {
                 token = typeAndToken[1];
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
-	if (token==null) {
-	    throw new WebApplicationException(Response.Status.UNAUTHORIZED);
-	}
+        if (token == null) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
         return token;
     }
 
-    public static int getUserIdFromAuthorization(String authorization){
+    public static int getUserIdFromAuthorization(String authorization) {
         return getUserIdFromToken(getTokenFromHeader(authorization));
     }
 
@@ -78,7 +76,7 @@ public final class PermissionsChecker {
     */
     public static boolean checkPermissionComment(Integer itemid, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
-        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",itemid));
+        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'", itemid));
         Integer permission = (Integer) getOneItemFromQuery(String.format("SELECT position FROM MemberprojectEntity WHERE memberid = '%s' AND projectid = '%s'", userid, projectId));
         return permission >= 2;
     }
@@ -91,7 +89,7 @@ public final class PermissionsChecker {
     */
     public static boolean checkPermissionWrite(int taskId, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
-        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",taskId));
+        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'", taskId));
         Integer permission = (Integer) getOneItemFromQuery(String.format("SELECT position FROM MemberprojectEntity WHERE memberid = '%s' AND projectid = '%s'", userid, projectId));
         return permission == 3;
     }
@@ -104,7 +102,7 @@ public final class PermissionsChecker {
     */
     public static boolean checkPermissionRead(int taskId, String authorization) {
         Integer userid = getUserIdFromToken(getTokenFromHeader(authorization));
-        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'",taskId));
+        Integer projectId = (Integer) getOneItemFromQuery(String.format("SELECT projectid FROM ItemEntity WHERE id = '%s'", taskId));
         Integer permission = (Integer) getOneItemFromQuery(String.format("SELECT position FROM MemberprojectEntity WHERE memberid = '%s' AND projectid = '%s'", userid, projectId));
         return permission >= 1;
     }
