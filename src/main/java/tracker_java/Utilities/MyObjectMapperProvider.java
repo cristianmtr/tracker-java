@@ -6,6 +6,7 @@ import javax.ws.rs.ext.Provider;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
@@ -35,10 +36,8 @@ public class MyObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
     private static ObjectMapper createDefaultMapper() {
         final ObjectMapper result = new ObjectMapper();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         result.enable(SerializationFeature.INDENT_OUTPUT);
-        result.setDateFormat(dateFormat);
+	    result.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return result;
     }
 
