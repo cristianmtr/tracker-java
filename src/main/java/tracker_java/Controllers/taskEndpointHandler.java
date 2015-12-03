@@ -33,7 +33,7 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlePostNewComment(final ItemcommentEntity newComment, @HeaderParam("Authorization") String authorization, @PathParam("id") int taskId) {
         if (!PermissionsChecker.checkPermissionComment(taskId, authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         newComment.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
@@ -55,7 +55,7 @@ public class taskEndpointHandler{
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handlePostHistory(@PathParam("id") int taskId, @HeaderParam("Authorization") String authorization,ItemstatusEntity newStatus) {
         if (!PermissionsChecker.checkPermissionWrite(taskId, authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         newStatus.setItemid(taskId);
         Session s = HibernateUtil.getSessionFactory().openSession();
@@ -78,11 +78,11 @@ public class taskEndpointHandler{
     public Response handleUpdateTask(@PathParam("id") int taskId, ItemEntity newTask, @HeaderParam("Authorization") String authorization) {
         // check if user can MOVE task from existing project
         if (!PermissionsChecker.checkPermissionWrite(taskId, authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         // check if user has WRITE access to destination project
         if (!PermissionsChecker.checkWritePermissionToProject(newTask.getProjectid(), authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -101,7 +101,7 @@ public class taskEndpointHandler{
         // when posting new task, check if the user has access to write the task
         // to the project
         if (!PermissionsChecker.checkWritePermissionToProject(newTask.getProjectid(), authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -121,7 +121,7 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetComments(@HeaderParam("Authorization") String authorization,@PathParam("id") int taskId) {
         if (!PermissionsChecker.checkPermissionRead(taskId, authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -137,7 +137,7 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetHistory(@HeaderParam("Authorization") String authorization,@PathParam("id") int taskId) {
         if (!PermissionsChecker.checkPermissionRead(taskId, authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
@@ -152,7 +152,7 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetTask(@HeaderParam("Authorization") String authorization,@PathParam("id")int taskId) {
         if (!PermissionsChecker.checkPermissionRead(taskId, authorization)) {
-            return Response.status(401).build();
+            return Response.status(403).build();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
