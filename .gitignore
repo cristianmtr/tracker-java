@@ -6,3 +6,5 @@ tmp/*
 target/*
 src/main/resources/hibernate.cfg.xml
 *~
+*tags
+*tags.idx
