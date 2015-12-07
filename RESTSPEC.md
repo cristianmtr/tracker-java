@@ -58,3 +58,27 @@ generate token;
 all subsequent requests would include the token in HTTP Authorization field - e.g.:
 
 	curl -i -H "Authorization: Bearer $token" localhost:8000/tasks/2
+
+## /permissions
+	curl -i -H "Authorization: Bearer E6F6C051-F408-4055-9BD2-36254D67AE18" localhost:8000/users/permissions
+
+returns permissions assoc. with Bearer token;
+
+__POST__
+
+	curl -i -X POST -H "Content-type: application/json" --data @perm.json -H "Authorization: Bearer E6F6C051-F408-4055-9BD2-36254D67AE18" localhost:8000/users/permissions
+
+	{
+	"memberid" : 5,
+	"projectid" : 1,
+	"position" : 2
+	}
+admin only
+overwrites or creates permissions;
+
+## /id/permissions
+	curl -i -H "Authorization: Bearer E6F6C051-F408-4055-9BD2-36254D67AE18" localhost:8000/users/5/permissions
+
+admin only
+get permissions of user id
+

@@ -18,7 +18,7 @@ import static tracker_java.Models.HibernateUtil.getOneItemFromQuery;
 
 public final class PermissionsChecker {
 
-    private boolean userIsAdmin(Integer memberId) {
+    public static boolean userIsAdmin(Integer memberId) {
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
         Query isAdminQuery = s.createQuery("select admin from MemberEntity where memberid = :memberid").setParameter("memberid", memberId);

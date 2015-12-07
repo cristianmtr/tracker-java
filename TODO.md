@@ -1,2 +1,6 @@
-- /init return tasks with read access and above;
 - /users/permissions - show permissions of user based on token
+- /init return permission info;
+- /users/permissions POST:
+	- admin only;
+	- {"projectid":permission_level}
+	- include in docs;
