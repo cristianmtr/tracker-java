@@ -1,6 +1,4 @@
-- /users/permissions - show permissions of user based on token
 - /init return permission info;
-- /users/permissions POST:
-	- admin only;
-	- {"projectid":permission_level}
-	- include in docs;
+	- tasklist should contain name and permission level;
+- /projects
+	- return info as in /init's tasklist;
