@@ -8,6 +8,8 @@ import tracker_java.Models.ItemEntity;
 import tracker_java.Models.ItemcommentEntity;
 import tracker_java.Models.ItemstatusEntity;
 import tracker_java.Utilities.PermissionsChecker;
+import tracker_java.Utilities.ResponseMessage;
+import tracker_java.Utilities.ResponseStandardSet;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -98,10 +100,14 @@ public class taskEndpointHandler{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlePostNewTask(ItemEntity newTask, @HeaderParam("Authorization") String authorization) {
+        // check newTask not null
+        if (newTask==null) {
+            return ResponseStandardSet.emptyDataOnPost();
+        }
         // when posting new task, check if the user has access to write the task
         // to the project
         if (!PermissionsChecker.checkWritePermissionToProject(newTask.getProjectid(), authorization)) {
-            return Response.status(403).build();
+            return ResponseStandardSet.noPermissionOnProject();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -116,12 +122,36 @@ public class taskEndpointHandler{
         return Response.status(201).entity(res).build();
     }
 
+    @Path("{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response handleDeleteTask(@HeaderParam("Authorization") String authorization, @PathParam("id") int taskId) {
+        // check if user has write permission on project of task
+        if (!PermissionsChecker.checkPermissionWrite(taskId, authorization)) {
+            return ResponseStandardSet.noPermissionOnProject();
+        }
+        // we need to first delete related entries
+        // comments
+        // history entries
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = s.beginTransaction();
+        Query qDelComms = s.createQuery(String.format("delete from ItemcommentEntity where itemid=%s",taskId));
+        qDelComms.executeUpdate();
+        Query qDelStatus = s.createQuery(String.format("delete from ItemstatusEntity where itemid=%s",taskId));
+        qDelStatus.executeUpdate();
+        Query qDelTask = s.createQuery(String.format("delete from ItemEntity where id=%s",taskId));
+        qDelTask.executeUpdate();
+        tx.commit();
+        s.close();
+        return Response.status(200).build();
+    }
+
     @Path("{id}/comments")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetComments(@HeaderParam("Authorization") String authorization,@PathParam("id") int taskId) {
         if (!PermissionsChecker.checkPermissionRead(taskId, authorization)) {
-            return Response.status(403).build();
+            return ResponseStandardSet.noPermissionOnProject();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = s.beginTransaction();
@@ -137,7 +167,7 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetHistory(@HeaderParam("Authorization") String authorization,@PathParam("id") int taskId) {
         if (!PermissionsChecker.checkPermissionRead(taskId, authorization)) {
-            return Response.status(403).build();
+            return ResponseStandardSet.noPermissionOnProject();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
@@ -152,7 +182,7 @@ public class taskEndpointHandler{
     @Produces(MediaType.APPLICATION_JSON)
     public Response handleGetTask(@HeaderParam("Authorization") String authorization,@PathParam("id")int taskId) {
         if (!PermissionsChecker.checkPermissionRead(taskId, authorization)) {
-            return Response.status(403).build();
+            return ResponseStandardSet.noPermissionOnProject();
         }
         Session s = HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();

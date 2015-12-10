@@ -15,12 +15,10 @@ public class ExceptionManager implements ExceptionMapper<Throwable> {
         e.printStackTrace();
         
         if ( e instanceof WebApplicationException ){
-            WebApplicationException theException = (WebApplicationException)e;
-            return theException.getResponse();
+            return ((WebApplicationException) e).getResponse();
         }
-        
-        return Response.serverError()
-                .entity(e.getMessage())
-                .build();
+
+        // TODO have debug mode
+        return ResponseStandardSet.serverErrorWithException(e);
     }
 }
