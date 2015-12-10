@@ -3,6 +3,7 @@ package tracker_java;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import tracker_java.Controllers.initHandler;
+import tracker_java.Controllers.projectEndpointHandler;
 import tracker_java.Controllers.taskEndpointHandler;
 import tracker_java.Controllers.userHandler;
 import tracker_java.Utilities.ExceptionManager;
@@ -18,6 +19,7 @@ public class Configuration extends ResourceConfig {
                 taskEndpointHandler.class,
                 initHandler.class,
                 userHandler.class,
+                projectEndpointHandler.class,
                 // register Jackson ObjectMapper resolver
                 MyObjectMapperProvider.class,
                 JacksonFeature.class,
