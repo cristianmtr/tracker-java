@@ -38,7 +38,7 @@ public class initHandler {
 
     }
 
-    private HashMap getDataSources(){
+    private HashMap getDataSources(int whichUser){
         HashMap dataSources = new HashMap();
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
@@ -61,6 +61,23 @@ public class initHandler {
             tasklists.put(tasklist.getProjectid(), tasklist.getName());
         }
 
+        session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Query q = session.createQuery("from MemberprojectEntity where memberid = :whichUser").setParameter("whichUser", whichUser);
+        List permissionsList = q.list();
+
+        HashMap permissionsHashMap = new HashMap();
+        for (MemberprojectEntity perm: (List<MemberprojectEntity>)permissionsList)
+        {
+            permissionsHashMap.put(perm.getProjectid(), perm.getPosition());
+        }
+        HashMap permssionsMeta = new HashMap();
+        permssionsMeta.put(0, "NONE");
+        permssionsMeta.put(1, "READ");
+        permssionsMeta.put(2, "COMMENT");
+        permssionsMeta.put(3, "EDIT");
+        permissionsHashMap.put("meta", permssionsMeta);
+
         HashMap priorities = new HashMap();
         priorities.put(1, "Urgent");
         priorities.put(2, "High Priority");
@@ -75,6 +92,7 @@ public class initHandler {
         dataSources.put("priority", priorities);
         dataSources.put("projectlist", tasklists);
         dataSources.put("responsible", members);
+        dataSources.put("permissions", permissionsHashMap);
 
         return dataSources;
     }
@@ -87,7 +105,7 @@ public class initHandler {
         Integer userId = PermissionsChecker.getUserIdFromAuthorization(authorization);
 
         List tasks = this.getAllTasks(userId);
-        HashMap dataSources = this.getDataSources();
+        HashMap dataSources = this.getDataSources(userId);
 
         HashMap result = new HashMap();
         result.put("data", tasks);
