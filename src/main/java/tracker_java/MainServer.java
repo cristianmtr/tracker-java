@@ -1,8 +1,10 @@
 package tracker_java;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import tracker_java.Utilities.ServerConfig;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,7 +16,8 @@ import java.util.logging.Logger;
  */
 public class MainServer {
     // Base URI the Grizzly HTTP server will listen on
-    private static final URI BASE_URI = URI.create("http://localhost:8000/");
+    private static final ServerConfig cfg = ConfigFactory.create(ServerConfig.class);
+    private static final URI BASE_URI = URI.create("http://" + cfg.hostname() + ":"+cfg.port()+"/");
 
     public static void main(String[] args) {
         try {
