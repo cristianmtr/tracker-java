@@ -1,4 +1,0 @@
-- /init return permission info;
-	- tasklist should contain name and permission level;
-- /projects
-	- return info as in /init's tasklist;

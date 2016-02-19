@@ -1,21 +1,27 @@
-## Repository for final project at school.
-	
-### To-dos, for starters:
-- database with appropriate schema (tasks, users, etc.);
-  - have a database in MySQL or PostgreSQL;
-  - schema to be handled by ORM;
-  - full UTF-8/Unicode support;
-- http server providing access to the list of tasks;
-  - user can authenticate;
-  - user can edit, post new tasks;
-  - endpoints for task by id, comments, history of task modification;
-- html page with table of tasks;
-  - connects via JavaScript to the endpoints of the server to get and post data;
-  - improved look and feel with responsive frameworks / custom CSS;
-  - search functionality for task entries;
+# TASKER #
 
-### The final deliverables of this project will be:
-  - the code base;
-  - a database with some demo data;
-  - a virtual machine setup with the site running;
-    - easily reproducible via instructions, using Vagrant;
+A pretentious, useless task manager, with overly complicated REST backend. Using redis, sqlalchemy, Jersey.
+
+## INSTALL ##
+
+- Clone the repos;
+- Make sure the directories match the ones mentioned in the nginx configuration file;
+- Install:
+    - PostgreSQL;
+    - Redis;
+    - JDK 8;
+    - Maven;
+    - sqlalchemy;
+    - nginx;
+- Create database “tracker” in PostgreSQL;
+- Make sure the demo data in the Python script suits your needs;
+- Set the environment variables;
+    - PSQLUSER: the username for the db;
+    - PSQLPASSWORD: the password;
+- Execute the schema creation and demo data scripts;
+- Compile the Java code using Maven, then run it;
+- Start the redis server;
+- Copy the nginx configuration file to the proper location and initialize it;
+- You can now connect to the site using ``cristian:cristian``;
+
+
