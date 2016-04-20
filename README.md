@@ -5,7 +5,10 @@ A pretentious, useless task manager, with overly complicated REST backend. Using
 ## INSTALL ##
 
 - Clone the repos;
-- Make sure the directories match the ones mentioned in the nginx configuration file;
+    - this one
+    - the database: [here](https://github.com/cristianmtr/tracker-db)
+    - the frontend: [here](https://github.com/cristianmtr/tracker-frontend)
+    - Make sure the directories match the ones mentioned in the nginx configuration file;
 - Install:
     - PostgreSQL;
     - Redis;
