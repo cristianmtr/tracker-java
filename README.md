@@ -1,6 +1,6 @@
 # TASKER #
 
-A pretentious, useless task manager, with overly complicated REST backend. Using redis, sqlalchemy, Jersey.
+A complex task manager, with sophisticated REST backend. Using redis, sqlalchemy, Jersey.
 
 ## INSTALL ##
 
